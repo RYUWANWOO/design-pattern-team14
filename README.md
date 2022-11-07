@@ -1,2 +1,2 @@
-# desing-pattern-team14
+# design-pattern-team14
 
