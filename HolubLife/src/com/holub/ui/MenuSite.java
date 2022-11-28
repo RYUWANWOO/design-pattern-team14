@@ -171,7 +171,7 @@ public final class MenuSite
 	 *  method in an assertion ("assert valid()") then it will
 	 *  be removed when assetions are enabled.
 	 *
-	 *  @throws AssertionException if the menu hasn't been established.
+	 *  //@throws AssertionException if the menu hasn't been established.
 	 */
 
 	private static boolean valid()

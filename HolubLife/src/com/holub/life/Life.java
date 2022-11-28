@@ -19,18 +19,24 @@ public final class Life extends JFrame
 	}
 
 	private Life()
-	{	super( "The Game of Life. "
+	{
+		//제목을 정해요 - 건들 필요 없고
+		super( "The Game of Life. "
 					+"(c)2003 Allen I. Holub <http://www.holub.com>");
 
-		// Must establish the MenuSite very early in case
-		// a subcomponent puts menus on it.
+		//menusite로 시작을 한다 -> 수정해야 할 게 menusite라는 것을 알 수 있다.
 		MenuSite.establish( this );		//{=life.java.establish}
 
+		//이건 jframe (jswing)에서 다루는 내용이라
+		//우리가 딱히 바꾸지 않아도 될 듯 하다!
 		setDefaultCloseOperation	( EXIT_ON_CLOSE 		);
 		getContentPane().setLayout	( new BorderLayout()	);
 		getContentPane().add( Universe.instance(), BorderLayout.CENTER); //{=life.java.install}
 
+		//pack()은 프레임내에 서브컴포넌트들의 레이아웃과 Prefered Size에
+		//맞도록 윈도우의 사이즈를 맞추는 작업이다. -> 딱히 건들 필요 없다
 		pack();
+		//visible도 건들 필요가 없다.
 		setVisible( true );
 	}
 }
