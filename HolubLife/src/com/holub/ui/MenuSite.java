@@ -191,7 +191,7 @@ public final class MenuSite
 		assert container != null;
 		assert menuFrame == null:
 							"Tried to establish more than one MenuSite";
-
+		//private static JFrame		menuFrame	= null;
 		menuFrame = container;
 		menuFrame.setJMenuBar( menuBar = new JMenuBar() );
 
@@ -1030,6 +1030,7 @@ public final class MenuSite
 
 		static public void main( String[] args ) throws Exception
 		{
+			/*
 			com.holub.tools.Log.toScreen("com.holub.ui");
 			UIManager.setLookAndFeel(
 				UIManager.getSystemLookAndFeelClassName() );
@@ -1209,7 +1210,7 @@ public final class MenuSite
 					{	MenuSite.removeMyMenus(x);
 					}
 				}
-			);
+			);*/
 		}
 	}
 }

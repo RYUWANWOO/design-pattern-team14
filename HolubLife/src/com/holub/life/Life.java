@@ -27,8 +27,6 @@ public final class Life extends JFrame
 		//menusite로 시작을 한다 -> 수정해야 할 게 menusite라는 것을 알 수 있다.
 		MenuSite.establish( this );		//{=life.java.establish}
 
-		//이건 jframe (jswing)에서 다루는 내용이라
-		//우리가 딱히 바꾸지 않아도 될 듯 하다!
 		setDefaultCloseOperation	( EXIT_ON_CLOSE 		);
 		getContentPane().setLayout	( new BorderLayout()	);
 		getContentPane().add( Universe.instance(), BorderLayout.CENTER); //{=life.java.install}

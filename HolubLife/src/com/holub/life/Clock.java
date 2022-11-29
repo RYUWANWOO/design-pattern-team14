@@ -92,6 +92,10 @@ public class Clock
 					String name = ((JMenuItem)e.getSource()).getName();
 					char toDo = name.charAt(0);
 
+					if( toDo=='D'){
+						tick();
+						tick();
+					}
 					if( toDo=='T' )
 						tick();				      // single tick
 					else
@@ -104,6 +108,7 @@ public class Clock
 																	// {=midSetup}
 		MenuSite.addLine(this,"Go","Halt",  			modifier);
 		MenuSite.addLine(this,"Go","Tick (Single Step)",modifier);
+		MenuSite.addLine(this,"Go","Double Tick (Double Step)",modifier);
 		MenuSite.addLine(this,"Go","Agonizing",	 	  	modifier);
 		MenuSite.addLine(this,"Go","Slow",		 		modifier);
 		MenuSite.addLine(this,"Go","Medium",	 	 	modifier);

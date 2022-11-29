@@ -60,10 +60,13 @@ public class Files
 	/** A unit test class for the methods in this class. Run with
 	 *  java com.holub.io.Files\$Test
 	 */
+
 	static class Test
 	{	
 		public static void main(String[] args)
-		{	try
+		{
+			/*
+			try
 			{	File f=Files.userSelected(".",".test","Test File","Select!");
 				System.out.println( "Selected " + f.getName() );
 			}
@@ -71,6 +74,8 @@ public class Files
 			{	System.out.println( "No file selected" );
 			}
 			System.exit(0); // Required to stop AWT thread & shut down.
+
+			 */
 		}
 	}
 }
