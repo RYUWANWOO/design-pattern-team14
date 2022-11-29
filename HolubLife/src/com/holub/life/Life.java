@@ -36,5 +36,11 @@ public final class Life extends JFrame
 		pack();
 		//visible도 건들 필요가 없다.
 		setVisible( true );
+
+
+
+
+		//test commit
+
 	}
 }
