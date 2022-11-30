@@ -29,7 +29,7 @@ public final class Life extends JFrame
 
 		setDefaultCloseOperation	( EXIT_ON_CLOSE 		);
 		getContentPane().setLayout	( new BorderLayout()	);
-		getContentPane().add( Universe.instance(), BorderLayout.CENTER); //{=life.java.install}
+		getContentPane().add( Universe.getInstance(), BorderLayout.CENTER); //{=life.java.install}
 
 		//pack()은 프레임내에 서브컴포넌트들의 레이아웃과 Prefered Size에
 		//맞도록 윈도우의 사이즈를 맞추는 작업이다. -> 딱히 건들 필요 없다

@@ -9,12 +9,6 @@ import java.awt.event.*;
 import com.holub.io.Files;
 import com.holub.ui.MenuSite;
 
-import com.holub.life.Cell;
-import com.holub.life.Storable;
-import com.holub.life.Clock;
-import com.holub.life.Neighborhood;
-import com.holub.life.Resident;
-
 /**
  * The Universe is a mediator that sits between the Swing
  * event model and the Life classes. It is also a singleton,
@@ -26,9 +20,8 @@ import com.holub.life.Resident;
  * @include /etc/license.txt
  */
 
-public class Universe extends JPanel
-{	private 		final Cell  	outermostCell;
-	private static	final Universe 	theInstance = new Universe();
+public class Universe extends JPanel {
+	private final Cell outermostCell;
 
 	/** The default height and width of a Neighborhood in cells.
 	 *  If it's too big, you'll run too slowly because
@@ -36,41 +29,30 @@ public class Universe extends JPanel
 	 *  to do. If it's too small, you have too many blocks to check.
 	 *  I've found that 8 is a good compromise.
 	 */
-	private static final int  DEFAULT_GRID_SIZE = 8;
+	private static final int DEFAULT_GRID_SIZE = 8;
 
 	/** The size of the smallest "atomic" cell---a Resident object.
 	 *  This size is extrinsic to a Resident (It's passed into the
 	 *  Resident's "draw yourself" method.
 	 */
-	private static final int  DEFAULT_CELL_SIZE = 8;
+	private static final int DEFAULT_CELL_SIZE = 8;
 
 	// The constructor is private so that the universe can be created
 	// only by an outer-class method [Neighborhood.createUniverse()].
 
-	private Universe()
-	{	// Create the nested Cells that comprise the "universe." A bug
+	private Universe() {
+		// Create the nested Cells that comprise the "universe." A bug
 		// in the current implementation causes the program to fail
 		// miserably if the overall size of the grid is too big to fit
 		// on the screen.
 
-		outermostCell = new Neighborhood
-						(	DEFAULT_GRID_SIZE,
-							new Neighborhood
-							(	DEFAULT_GRID_SIZE,
-								new Resident()
-							)
-						);
+		outermostCell = new Neighborhood(DEFAULT_GRID_SIZE,
+				new Neighborhood(DEFAULT_GRID_SIZE, new Resident()));
 
-		final Dimension PREFERRED_SIZE =
-						new Dimension
-						(  outermostCell.widthInCells() * DEFAULT_CELL_SIZE,
-						   outermostCell.widthInCells() * DEFAULT_CELL_SIZE
-						);
+		final Dimension PREFERRED_SIZE = new Dimension(outermostCell.widthInCells() * DEFAULT_CELL_SIZE, outermostCell.widthInCells() * DEFAULT_CELL_SIZE);
 
-		addComponentListener
-		(	new ComponentAdapter()
-			{	public void componentResized(ComponentEvent e)
-				{
+		addComponentListener(new ComponentAdapter(){
+			public void componentResized(ComponentEvent e) {
 					// Make sure that the cells fit evenly into the
 					// total grid size so that each cell will be the
 					// same size. For example, in a 64x64 grid, the
@@ -159,8 +141,12 @@ public class Universe extends JPanel
 	 *  in Neighborhood.createUniverse()
 	 */
 
-	public static Universe instance()
-	{	return theInstance;
+	public static Universe getInstance() {
+		return LazyHolder.INSTANCE;
+	}
+
+	private static class LazyHolder{
+		private static final Universe INSTANCE = new Universe();
 	}
 
 	private void doLoad()
@@ -211,8 +197,7 @@ public class Universe extends JPanel
 	 *  (The size is passed into the outermost <code>Cell</code>.)
 	 */
 
-	public void paint(Graphics g)
-	{
+	public void paint(Graphics g) {
 		Rectangle panelBounds = getBounds();
 		Rectangle clipBounds  = g.getClipBounds();
 
