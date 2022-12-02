@@ -14,8 +14,7 @@ import com.holub.tools.Direction;
  * @include /etc/license.txt
  */
 
-public final class Resident implements Cell
-{
+public final class Resident implements Cell {
 	private static final Color BORDER_COLOR = Colors.DARK_YELLOW;
 	private static final Color LIVE_COLOR 	= Color.RED;
 	private static final Color DEAD_COLOR   = Colors.LIGHT_YELLOW;
@@ -60,7 +59,7 @@ public final class Resident implements Cell
 	}
 
 	private void verify( Cell c, String direction )
-	{	assert (c instanceof Resident) || (c == Cell.DUMMY)
+	{	assert (c instanceof Resident) || (c == DummyCell.getInstance())
 				: "incorrect type for " + direction +  ": " +
 				   c.getClass().getName();
 	}
@@ -69,19 +68,19 @@ public final class Resident implements Cell
 	 *  an internal error for any position except for (0,0) to be
 	 *  requsted since the width is 1.
 	 */
-	public Cell	edge(int row, int column)
-	{	assert row==0 && column==0;
+	public Cell	edge(int row, int column) {
+		assert row==0 && column==0;
 		return this;
 	}
 
-	public boolean transition()
-	{	boolean changed = isStable();
+	public boolean transition() {
+		boolean changed = isStable();
 		amAlive = willBeAlive;
 		return changed;
 	}
 
-	public void redraw(Graphics g, Rectangle here, boolean drawAll)
-    {   g = g.create();
+	public void redraw(Graphics g, Rectangle here, boolean drawAll){
+		g = g.create();
 		g.setColor(amAlive ? LIVE_COLOR : DEAD_COLOR );
 		g.fillRect(here.x+1, here.y+1, here.width-1, here.height-1);
 
@@ -95,28 +94,38 @@ public final class Resident implements Cell
 		g.dispose();
 	}
 
-	public void userClicked(Point here, Rectangle surface)
-	{	amAlive = !amAlive;
+	public void userClicked(Point here, Rectangle surface){
+		amAlive = !amAlive;
 	}
 
-	public void	   clear()			{amAlive = willBeAlive = false; }
-	public boolean isAlive()		{return amAlive;			    }
-	public Cell    create()			{return new Resident();			}
-	public int 	   widthInCells()	{return 1;}
-
-	public Direction isDisruptiveTo()
-	{	return isStable() ? Direction.NONE : Direction.ALL ;
+	public void clear() {
+		amAlive = willBeAlive = false;
+	}
+	public boolean isAlive() {
+		return amAlive;
+	}
+	public Cell create() {
+		return new Resident();
+	}
+	public int widthInCells() {
+		return 1;
 	}
 
-	public boolean transfer(Storable blob,Point upperLeft,boolean doLoad)
-	{
+	public Direction isDisruptiveTo() {
+		return isStable() ? Direction.NONE : Direction.ALL;
+	}
+
+	public boolean transfer(Storable blob,Point upperLeft,boolean doLoad){
 		Memento memento = (Memento)blob;
-		if( doLoad )
-		{	if( amAlive = willBeAlive = memento.isAlive(upperLeft) )
+		if( doLoad ){
+			if( amAlive = willBeAlive = memento.isAlive(upperLeft) ) {
 				return true;
+			}
 		}
-		else if( amAlive )  					// store only live cells
-			memento.markAsAlive( upperLeft );
+		// store only live cells
+		else if( amAlive ) {
+			memento.markAsAlive(upperLeft);
+		}
 
 		return false;
 	}
@@ -124,8 +133,7 @@ public final class Resident implements Cell
 	/** Mementos must be created by Neighborhood objects. Throw an
 	 *  exception if anybody tries to do it here.
 	 */
-	public Storable createMemento()
-	{	throw new UnsupportedOperationException(
-					"May not create memento of a unitary cell");
+	public Storable createMemento() {
+		throw new UnsupportedOperationException("May not create memento of a unitary cell");
 	}
 }

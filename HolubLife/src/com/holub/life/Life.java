@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
+import com.holub.life.model.DummyCell;
 import com.holub.life.view.UniverseView;
 import com.holub.ui.MenuSite;
 
@@ -31,7 +32,8 @@ public final class Life extends JFrame
 
 		MenuSite.establish( this );		//{=life.java.establish}
 
-		Clock clock = Clock.instance();
+		Clock clock = Clock.getInstance();
+		DummyCell dummyCell = DummyCell.getInstance();
 		Universe universe = Universe.getInstance();
 		UniverseView universeView = UniverseView.getInstance();
 

@@ -47,11 +47,13 @@ public class Clock implements Observable {
 	 *  <code>Clock.instance()</code>. It's illegal to call
 	 *  <code>new Clock()</code>.
 	 */
-	public synchronized static Clock instance(){
-		if( instance == null ) {
-			instance = new Clock();
-		}
-		return instance;
+
+	public static Clock getInstance() {
+		return Clock.LazyHolder.INSTANCE;
+	}
+
+	private static class LazyHolder{
+		private static final Clock INSTANCE = new Clock();
 	}
 
 	/** Start up the clock.
@@ -193,9 +195,8 @@ public class Clock implements Observable {
 	 *  MenuSite users, it makes an "end run" around the facade.
 	 */
 
-	private boolean menuIsActive()
-	{	MenuElement[] path =
-					MenuSelectionManager.defaultManager().getSelectedPath();
+	private boolean menuIsActive(){
+		MenuElement[] path = MenuSelectionManager.defaultManager().getSelectedPath();
 		return ( path != null && path.length > 0 );
 	}
 }

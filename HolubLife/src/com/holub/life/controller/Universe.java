@@ -6,6 +6,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import com.holub.io.Files;
+import com.holub.life.model.DummyCell;
 import com.holub.tools.Observable;
 import com.holub.tools.Observer;
 import com.holub.tools.Storable;
@@ -58,10 +59,11 @@ public class Universe implements Observable {
 		this.publisher = new Publisher();
 
 		//{=Universe.clock.subscribe}
-		Clock.instance().registerObserver(new Observer() {
+		Clock.getInstance().registerObserver(new Observer() {
 			@Override
 			public void update() {
-				if (outermostCell.figureNextState(Cell.DUMMY, Cell.DUMMY, Cell.DUMMY, Cell.DUMMY, Cell.DUMMY, Cell.DUMMY, Cell.DUMMY, Cell.DUMMY)) {
+				if (outermostCell.figureNextState(DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(),
+						DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance())) {
 					if (outermostCell.transition()) {
 						notifyObservers();
 					}
@@ -73,10 +75,6 @@ public class Universe implements Observable {
 	/** Singleton Accessor. The Universe object itself is manufactured
 	 *  in Neighborhood.createUniverse()
 	 */
-
-	public static Universe getInstance() {
-		return LazyHolder.INSTANCE;
-	}
 
 	@Override
 	public void registerObserver(Observer observer) {
@@ -96,6 +94,10 @@ public class Universe implements Observable {
 				((Observer)object).update();
 			}
 		});
+	}
+
+	public static Universe getInstance() {
+		return LazyHolder.INSTANCE;
 	}
 
 	private static class LazyHolder{
@@ -130,7 +132,7 @@ public class Universe implements Observable {
 			FileOutputStream out = new FileOutputStream(
 				  Files.userSelected(".",".life","Life File","Write"));
 
-			Clock.instance().stop();		// stop the game
+			Clock.getInstance().stop();		// stop the game
 
 			Storable memento = outermostCell.createMemento();
 			outermostCell.transfer( memento, new Point(0,0), Cell.STORE );
