@@ -8,6 +8,7 @@ import com.holub.life.controller.Universe;
 import com.holub.life.model.DummyCell;
 import com.holub.life.universe_settings.SampleSetting;
 import com.holub.life.universe_settings.SettingA;
+import com.holub.life.universe_settings.SettingB;
 import com.holub.life.view.UniverseView;
 import com.holub.ui.MenuSite;
 
@@ -43,7 +44,7 @@ public final class Life extends JFrame
 		getContentPane().add( universeview, BorderLayout.CENTER); //{=life.java.install}
 
 		//리스너를 더해요
-		SampleSetting now_setting = new SettingA();
+		SampleSetting now_setting = new SettingB();
 		now_setting.establish();
 
 		//pack()은 프레임내에 서브컴포넌트들의 레이아웃과 Prefered Size에

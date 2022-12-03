@@ -9,8 +9,8 @@ import java.awt.event.*;
 
 public class SettingA extends SampleSetting{
 
-    private Universe universe;
-    private UniverseView universeview;
+    Universe universe;
+    UniverseView universeview;
 
     public SettingA(){
         universe = Universe.getInstance();
