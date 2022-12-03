@@ -1,5 +1,5 @@
 package com.holub.tools;
 
 public interface Visitor {
-    public void visit(Object object);
+    public void visit(Observer observer);
 }

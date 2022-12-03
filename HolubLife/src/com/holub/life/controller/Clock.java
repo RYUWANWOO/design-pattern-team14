@@ -150,8 +150,8 @@ public class Clock implements Observable {
 	public void notifyObservers() {
 		publisher.publish(new Visitor() {
 			@Override
-			public void visit(Object object) {
-				((Observer)object).update();
+			public void visit(Observer observer) {
+				observer.update();
 			}
 		});
 	}
@@ -167,10 +167,8 @@ public class Clock implements Observable {
 	public void tick(){
 		publisher.publish( new Visitor(){
 			@Override
-			public void visit(Object object) {
-				if(!menuIsActive()){
-					((Observer) object).update();
-				}
+			public void visit(Observer observer) {
+				observer.update();
 			}
 		});
 	}

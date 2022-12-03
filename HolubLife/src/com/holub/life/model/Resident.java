@@ -2,10 +2,10 @@ package com.holub.life.model;
 
 import java.awt.*;
 
+import com.holub.tools.*;
 import com.holub.ui.Colors;	// Contains constants specifying various
 							// colors not defined in java.awt.Color.
-import com.holub.tools.Storable;
-import com.holub.tools.Direction;
+
 
 /*** ****************************************************************
  * The Resident class implements a single cell---a "resident" of a
@@ -14,15 +14,19 @@ import com.holub.tools.Direction;
  * @include /etc/license.txt
  */
 
-public final class Resident implements Cell {
-	private static final Color BORDER_COLOR = Colors.DARK_YELLOW;
-	private static final Color LIVE_COLOR 	= Color.RED;
-	private static final Color DEAD_COLOR   = Colors.LIGHT_YELLOW;
+public final class Resident implements Cell, Observable {
+	private Publisher publisher;
 
 	private boolean amAlive 	= false;
 	private boolean willBeAlive	= false;
 
-	private boolean isStable(){return amAlive == willBeAlive; }
+	public Resident(){
+		this.publisher = new Publisher();
+	}
+
+	private boolean isStable() {
+		return amAlive == willBeAlive;
+	}
 
 	/** figure the next state.
 	 *  @return true if the cell is not stable (will change state on the
@@ -32,8 +36,7 @@ public final class Resident implements Cell {
 							Cell north, 	Cell south,
 							Cell east, 		Cell west,
 							Cell northeast, Cell northwest,
-							Cell southeast, Cell southwest )
-	{
+							Cell southeast, Cell southwest ) {
 		verify( north, 		"north"		);
 		verify( south, 		"south"		);
 		verify( east, 		"east"		);
@@ -58,10 +61,10 @@ public final class Resident implements Cell {
 		return !isStable();
 	}
 
-	private void verify( Cell c, String direction )
-	{	assert (c instanceof Resident) || (c == DummyCell.getInstance())
-				: "incorrect type for " + direction +  ": " +
-				   c.getClass().getName();
+	private void verify( Cell c, String direction ) {
+		assert (c instanceof Resident) || (c == DummyCell.getInstance())
+				: "incorrect type for " + direction +  ": "
+				+ c.getClass().getName();
 	}
 
 	/** This cell is monetary, so it's at every edge of itself. It's
@@ -79,20 +82,33 @@ public final class Resident implements Cell {
 		return changed;
 	}
 
-	public void redraw(Graphics g, Rectangle here, boolean drawAll){
-		g = g.create();
-		g.setColor(amAlive ? LIVE_COLOR : DEAD_COLOR );
-		g.fillRect(here.x+1, here.y+1, here.width-1, here.height-1);
-
-		// Doesn't draw a line on the far right and bottom of the
-		// grid, but that's life, so to speak. It's not worth the
-		// code for the special case.
-
-		g.setColor( BORDER_COLOR );
-		g.drawLine( here.x, here.y, here.x, here.y + here.height );
-		g.drawLine( here.x, here.y, here.x + here.width, here.y  );
-		g.dispose();
+	public void tick(){
+		if (figureNextState(DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(),
+				DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance())) {
+			if (transition()) {
+				notifyObservers();
+			}
+		}
 	}
+
+	public boolean isAmAlive(){
+		return this.amAlive;
+	}
+
+//	public void redraw(Graphics g, Rectangle here, boolean drawAll){
+//		g = g.create();
+//		g.setColor(amAlive ? LIVE_COLOR : DEAD_COLOR );
+//		g.fillRect(here.x+1, here.y+1, here.width-1, here.height-1);
+//
+//		// Doesn't draw a line on the far right and bottom of the
+//		// grid, but that's life, so to speak. It's not worth the
+//		// code for the special case.
+//
+//		g.setColor( BORDER_COLOR );
+//		g.drawLine( here.x, here.y, here.x, here.y + here.height );
+//		g.drawLine( here.x, here.y, here.x + here.width, here.y  );
+//		g.dispose();
+//	}
 
 	public void userClicked(Point here, Rectangle surface){
 		amAlive = !amAlive;
@@ -101,12 +117,15 @@ public final class Resident implements Cell {
 	public void clear() {
 		amAlive = willBeAlive = false;
 	}
+
 	public boolean isAlive() {
 		return amAlive;
 	}
+
 	public Cell create() {
 		return new Resident();
 	}
+
 	public int widthInCells() {
 		return 1;
 	}
@@ -135,5 +154,25 @@ public final class Resident implements Cell {
 	 */
 	public Storable createMemento() {
 		throw new UnsupportedOperationException("May not create memento of a unitary cell");
+	}
+
+	@Override
+	public void registerObserver(Observer observer) {
+		publisher.subscribe(observer);
+	}
+
+	@Override
+	public void removeObserver(Observer observer) {
+		publisher.cancelSubscription(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+		publisher.publish(new Visitor() {
+			@Override
+			public void visit(Observer observer) {
+				observer.update();
+			}
+		});
 	}
 }

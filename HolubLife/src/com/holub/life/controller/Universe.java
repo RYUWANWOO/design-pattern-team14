@@ -27,9 +27,8 @@ import com.holub.tools.Publisher;
  * @include /etc/license.txt
  */
 
-public class Universe implements Observable {
+public class Universe implements Observer {
 	private final Cell outermostCell;
-	private Publisher publisher;
 
 	/** The default height and width of a Neighborhood in cells.
 	 *  If it's too big, you'll run too slowly because
@@ -56,44 +55,8 @@ public class Universe implements Observable {
 
 		outermostCell = new Neighborhood(DEFAULT_GRID_SIZE,
 				new Neighborhood(DEFAULT_GRID_SIZE, new Resident()));
-		this.publisher = new Publisher();
 
-		//{=Universe.clock.subscribe}
-		Clock.getInstance().registerObserver(new Observer() {
-			@Override
-			public void update() {
-				if (outermostCell.figureNextState(DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(),
-						DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance(), DummyCell.getInstance())) {
-					if (outermostCell.transition()) {
-						notifyObservers();
-					}
-				}
-			}
-		});
-	}
-
-	/** Singleton Accessor. The Universe object itself is manufactured
-	 *  in Neighborhood.createUniverse()
-	 */
-
-	@Override
-	public void registerObserver(Observer observer) {
-		publisher.subscribe(observer);
-	}
-
-	@Override
-	public void removeObserver(Observer observer) {
-		publisher.cancelSubscription(observer);
-	}
-
-	@Override
-	public void notifyObservers(){
-		publisher.publish(new Visitor() {
-			@Override
-			public void visit(Object object) {
-				((Observer)object).update();
-			}
-		});
+		Clock.getInstance().registerObserver(this);
 	}
 
 	public static Universe getInstance() {
@@ -102,6 +65,11 @@ public class Universe implements Observable {
 
 	private static class LazyHolder{
 		private static final Universe INSTANCE = new Universe();
+	}
+
+	@Override
+	public void update() {
+		outermostCell.tick();
 	}
 
 //	public void doLoad()
@@ -126,9 +94,8 @@ public class Universe implements Observable {
 //		repaint();
 //	}
 
-	public void doStore()
-	{	try
-		{
+	public void doStore() {
+		try {
 			FileOutputStream out = new FileOutputStream(
 				  Files.userSelected(".",".life","Life File","Write"));
 
@@ -139,9 +106,8 @@ public class Universe implements Observable {
 			memento.flush(out);
 
 			out.close();
-		}
-		catch( IOException theException )
-		{	JOptionPane.showMessageDialog( null, "Write Failed!",
+		} catch( IOException theException ){
+			JOptionPane.showMessageDialog( null, "Write Failed!",
 					"The Game of Life", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -153,10 +119,12 @@ public class Universe implements Observable {
 	public void userClicked(Point here, Rectangle surface){
 		outermostCell.userClicked(here,surface);
 	}
+
 	public void clear(){
 		outermostCell.clear();
 	}
-	public void redraw(Graphics g, Rectangle here, boolean drawAll){
-		outermostCell.redraw(g,here,drawAll);
+
+	public Cell getOutermostCell(){
+		return this.outermostCell;
 	}
 }

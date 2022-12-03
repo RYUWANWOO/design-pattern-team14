@@ -31,10 +31,6 @@ public class DummyCell implements Cell{
     }
 
     @Override
-    public void redraw(Graphics g, Rectangle here, boolean drawAll) {
-    }
-
-    @Override
     public void userClicked(Point here, Rectangle surface) {
     }
 
@@ -70,5 +66,9 @@ public class DummyCell implements Cell{
     @Override
     public Storable createMemento() {
         throw new UnsupportedOperationException("Cannot create memento of dummy block");
+    }
+
+    @Override
+    public void tick() {
     }
 }
