@@ -3,11 +3,9 @@ package com.holub.life.view;
 import com.holub.life.model.Cell;
 import com.holub.tools.Observer;
 import com.holub.life.controller.Universe;
-import com.holub.life.universe_settings.DummySettings;
-import com.holub.ui.MenuSite;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class UniverseView extends JPanel implements Observer {
     private final Universe universe;
@@ -27,43 +25,6 @@ public class UniverseView extends JPanel implements Observer {
         setMaximumSize(PREFERRED_SIZE);
         setMinimumSize(PREFERRED_SIZE);
         setOpaque(true);
-
-        //{=Universe.mouse}
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                Rectangle bounds = getBounds();
-                bounds.x = 0;
-                bounds.y = 0;
-                universe.userClicked(e.getPoint(), bounds);
-                repaint();
-            }
-        });
-
-        MenuSite.addLine(this, "Grid", "Clear", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                universe.clear();
-                repaint();
-            }
-        });
-
-        // {=Universe.load.setup}
-//        MenuSite.addLine(this, "Grid", "Load",new ActionListener(){
-//            public void actionPerformed(ActionEvent e){
-//                universe.doLoad();
-//            }
-//        });
-
-        MenuSite.addLine(this, "Grid", "Store", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                universe.doStore();
-            }
-        });
-
-        MenuSite.addLine(this, "Grid", "Exit", new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
     }
 
     public static UniverseView getInstance() {
