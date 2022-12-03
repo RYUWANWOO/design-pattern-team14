@@ -1,11 +1,10 @@
 package com.holub.life.view;
 
 import com.holub.life.model.Cell;
-import com.holub.life.model.Neighborhood;
 import com.holub.tools.Observer;
 import com.holub.life.controller.Universe;
+import com.holub.life.universe_settings.DummySettings;
 import com.holub.ui.MenuSite;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,22 +20,6 @@ public class UniverseView extends JPanel implements Observer {
 
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE, universe.getWidthInCells() * DEFAULT_CELL_SIZE);
         this.cell = universe.getOutermostCell();
-
-        addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                // Make sure that the cells fit evenly into the
-                // total grid size so that each cell will be the
-                // same size. For example, in a 64x64 grid, the
-                // total size must be an even multiple of 63.
-
-                Rectangle bounds = getBounds();
-                bounds.height /= universe.getWidthInCells();
-                bounds.height *= universe.getWidthInCells();
-                bounds.width = bounds.height;
-                setBounds(bounds);
-            }
-        });
-
         this.cellView = new NeighborhoodView(cell,this);
 
         setBackground(Color.white);

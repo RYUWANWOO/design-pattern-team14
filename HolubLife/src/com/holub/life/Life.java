@@ -1,13 +1,17 @@
 package com.holub.life;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
 import com.holub.life.model.DummyCell;
 import com.holub.life.view.UniverseView;
+import com.holub.life.universe_settings.DummySettings;
 import com.holub.ui.MenuSite;
+import com.sun.org.apache.bcel.internal.generic.DUP;
 
 /*******************************************************************
  * An implemenation of Conway's Game of Life.
@@ -21,8 +25,7 @@ public final class Life extends JFrame
 	{	new Life();
 	}
 
-	private Life()
-	{
+	private Life() {
 		//제목을 정해요 - 건들 필요 없고
 		super( "The Game of Life. "
 					+"(c)2003 Allen I. Holub <http://www.holub.com>");
@@ -35,11 +38,14 @@ public final class Life extends JFrame
 		Clock clock = Clock.getInstance();
 		DummyCell dummyCell = DummyCell.getInstance();
 		Universe universe = Universe.getInstance();
-		UniverseView universeView = UniverseView.getInstance();
+		UniverseView universeview = UniverseView.getInstance();
 
 		setDefaultCloseOperation	( EXIT_ON_CLOSE 		);
 		getContentPane().setLayout	( new BorderLayout()	);
-		getContentPane().add( UniverseView.getInstance(), BorderLayout.CENTER); //{=life.java.install}
+
+		DummySettings dummy = new DummySettings();
+		dummy.establish();
+		getContentPane().add( universeview, BorderLayout.CENTER); //{=life.java.install}
 
 		//pack()은 프레임내에 서브컴포넌트들의 레이아웃과 Prefered Size에
 		//맞도록 윈도우의 사이즈를 맞추는 작업이다. -> 딱히 건들 필요 없다
