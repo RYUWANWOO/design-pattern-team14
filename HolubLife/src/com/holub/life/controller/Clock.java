@@ -1,10 +1,13 @@
-package com.holub.life;
+package com.holub.life.controller;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.util.Timer;		// overrides java.awt.timer
+
+import com.holub.tools.Observable;
+import com.holub.tools.Observer;
+import com.holub.tools.Visitor;
 import com.holub.ui.MenuSite;
 import com.holub.tools.Publisher;
 
@@ -26,17 +29,15 @@ import com.holub.tools.Publisher;
  * @include /etc/license.txt
  */
 
-public class Clock
-{	private Timer			clock		= new Timer();
-	private TimerTask		tick		= null;
+public class Clock implements Observable {
+	private Timer clock = new Timer();
+	private TimerTask tick = null;
 
 	// The clock can't be an everything-is-static singleton because
 	// it creates a menu, and it can't do that until the menus
 	// are established.
 	//
-	private Clock()
-	{	createMenus();
-	}
+	private Clock(){}
 
 	private static Clock instance;
 
@@ -44,10 +45,13 @@ public class Clock
 	 *  <code>Clock.instance()</code>. It's illegal to call
 	 *  <code>new Clock()</code>.
 	 */
-	public synchronized static Clock instance()
-	{	if( instance == null )
-			instance = new Clock();
-		return instance;
+
+	public static Clock getInstance() {
+		return Clock.LazyHolder.INSTANCE;
+	}
+
+	private static class LazyHolder{
+		private static final Clock INSTANCE = new Clock();
 	}
 
 	/** Start up the clock.
@@ -56,16 +60,18 @@ public class Clock
 	 *  					 the clock should be stopped.
 	 */
 
-	public void startTicking( int millisecondsBetweenTicks )
-	{	if(tick != null)
-		{	tick.cancel();
+	public void startTicking( int millisecondsBetweenTicks ){
+		if(tick != null) {
+			tick.cancel();
 			tick=null;
 		}
 
-		if( millisecondsBetweenTicks > 0 )
-		{	tick =	new TimerTask()
-					{	public void run(){ tick(); }
-					};
+		if( millisecondsBetweenTicks > 0 ){
+			tick =	new TimerTask() {
+				public void run(){
+					tick();
+				}
+			};
 			clock.scheduleAtFixedRate( tick, 0, millisecondsBetweenTicks);
 		}
 	}
@@ -73,47 +79,13 @@ public class Clock
 	/** Stop the clock
 	 */
 
-	public void stop()
-	{	startTicking( 0 );
+	public void stop(){
+		startTicking( 0 );
 	}
 
 	/** Create the menu that controls the clock speed and
 	 *  put it onto the menu site. 
 	 */
-	private void createMenus()
-	{
-		// First set up a single listener that will handle all the
-		// menu-selection events except "Exit"
-
-		ActionListener modifier =									//{=startSetup}
-			new ActionListener()
-			{	public void actionPerformed(ActionEvent e)
-				{
-					String name = ((JMenuItem)e.getSource()).getName();
-					char toDo = name.charAt(0);
-
-					if( toDo=='D'){
-						tick();
-						tick();
-					}
-					if( toDo=='T' )
-						tick();				      // single tick
-					else
-						startTicking(   toDo=='A' ? 500:	  // agonizing
-										toDo=='S' ? 150:	  // slow
-										toDo=='M' ? 70 :	  // medium
-										toDo=='F' ? 30 : 0 ); // fast
-				}
-			};
-																	// {=midSetup}
-		MenuSite.addLine(this,"Go","Halt",  			modifier);
-		MenuSite.addLine(this,"Go","Tick (Single Step)",modifier);
-		MenuSite.addLine(this,"Go","Double Tick (Double Step)",modifier);
-		MenuSite.addLine(this,"Go","Agonizing",	 	  	modifier);
-		MenuSite.addLine(this,"Go","Slow",		 		modifier);
-		MenuSite.addLine(this,"Go","Medium",	 	 	modifier);
-		MenuSite.addLine(this,"Go","Fast",				modifier); // {=endSetup}
-	}	//{=endCreateMenus}
 
 	private Publisher publisher = new Publisher();
 
@@ -128,30 +100,42 @@ public class Clock
 	 *  );
 	 *  </PRE>
 	 */
-	public void addClockListener( Listener observer )
-	{	publisher.subscribe(observer);
+
+	@Override
+	public void registerObserver(Observer observer){
+		publisher.subscribe(observer);
+	}
+
+	@Override
+	public void removeObserver(Observer observer) {
+		publisher.cancelSubscription(observer);
+	}
+
+	@Override
+	public void notifyObservers() {
+		publisher.publish(new Visitor() {
+			@Override
+			public void visit(Observer observer) {
+				observer.update();
+			}
+		});
 	}
 
 	/** Implement this interface to be notified about clock ticks.
 	 *  @see Clock
 	 */
-	public interface Listener
-	{	void tick();
-	}
 
 	/** Force the clock to "tick," even if it's not time for
 	 *  a tick. Useful for forcing a tick when the clock is
 	 *  stopped. (Life uses this for single stepping.)
 	 */
-	public void tick()
-	{	publisher.publish
-		(	new Publisher.Distributor()
-			{	public void deliverTo( Object subscriber )
-				{	if( !menuIsActive() )
-						((Listener)subscriber).tick();
-				}
+	public void tick(){
+		publisher.publish( new Visitor(){
+			@Override
+			public void visit(Observer observer) {
+				observer.update();
 			}
-		);
+		});
 	}
 
 	/** Check if any item on the menu bar has been selected.
@@ -174,9 +158,8 @@ public class Clock
 	 *  MenuSite users, it makes an "end run" around the facade.
 	 */
 
-	private boolean menuIsActive()
-	{	MenuElement[] path =
-					MenuSelectionManager.defaultManager().getSelectedPath();
+	private boolean menuIsActive(){
+		MenuElement[] path = MenuSelectionManager.defaultManager().getSelectedPath();
 		return ( path != null && path.length > 0 );
 	}
 }

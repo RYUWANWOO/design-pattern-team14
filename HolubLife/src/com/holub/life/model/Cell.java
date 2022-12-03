@@ -1,7 +1,8 @@
-package com.holub.life;
+package com.holub.life.model;
 import java.awt.*;
 
-import com.holub.life.Storable;
+import com.holub.tools.Direction;
+import com.holub.tools.Storable;
 
 /***
  * This interface is the basic unit that comprises a life board.
@@ -12,8 +13,7 @@ import com.holub.life.Storable;
  * @include /etc/license.txt
  */
 
-public interface Cell
-{
+public interface Cell {
 	/** Figure out the next state of the cell, given the specified
 	 *  neighbors.
 	 *  @return true if the cell is unstable (changed state).
@@ -51,7 +51,7 @@ public interface Cell
 	 *  otherwise, draw only the subcells that need to be redrawn.
 	 */
 
-	void redraw(Graphics g, Rectangle here, boolean drawAll);
+//	void redraw(Graphics g, Rectangle here, boolean drawAll);
 
 	/** A user has clicked somewhere within you.
 	 *  @param here The position of the click relative to the bounding
@@ -93,8 +93,8 @@ public interface Cell
 	 *	@see Cell
 	 */
 
-	interface Memento extends Storable
-	{	/** On creation of the memento, indicate that a cell is
+	interface Memento extends Storable {
+		/** On creation of the memento, indicate that a cell is
 		 *  alive.
 		 */
 		void markAsAlive	(Point location);
@@ -109,8 +109,7 @@ public interface Cell
 	 *   of a cell from a memento.
 	 *   @return true if this cell was modified by the transfer.
 	 */
-	boolean transfer( Storable memento, Point upperLeftCorner,
-													boolean doLoad );
+	boolean transfer( Storable memento, Point upperLeftCorner, boolean doLoad );
 
 	/** Possible value for the "load" argument to transfer() */
 	public static boolean STORE = false;
@@ -134,31 +133,5 @@ public interface Cell
 	 * 	members in an interface.
 	 */
 
-	public static final Cell DUMMY = new Cell()
-	{
-		public boolean figureNextState(Cell n,  Cell s,  Cell e,  Cell w,
-									   Cell ne, Cell nw, Cell se, Cell sw)
-											{return true;  			  }
-
-		public Cell		 edge(int r, int c)	{return this;  			  }
-		public boolean	 isAlive()		   	{return false; 			  }
-		public Cell 	 create()	   	   	{return this;			  }
-		public Direction isDisruptiveTo()	{return Direction.NONE;	  }
-		public void 	 clear()		   	{						  }
-		public int 		 widthInCells()  	{return 0;				  }
-		public boolean	 transition()		{return false;			  }
-
-		public void	userClicked(Point h, Rectangle s				){}
-		public void redraw 		(Graphics g, Rectangle here,
-												 boolean drawAll	){}
-
-		public boolean transfer( Storable m, Point ul, boolean load )
-		{	return false;
-		}
-
-		public Storable createMemento()
-		{	throw new UnsupportedOperationException(
-						"Cannot create memento of dummy block");
-		}
-	};
+	public void	tick();
 }
