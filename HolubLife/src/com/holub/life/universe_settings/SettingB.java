@@ -28,4 +28,13 @@ public class SettingB extends SettingA{
             }
         });
     }
+
+    @Override
+    public void clock_setting(){
+        super.clock_setting();
+
+        MenuSite.addLine(this,"Go","Slow",		 		modifier);
+        MenuSite.addLine(this,"Go","Medium",	 	 	modifier);
+        MenuSite.addLine(this,"Go","Fast",				modifier); // {=endSetup}
+    }
 }

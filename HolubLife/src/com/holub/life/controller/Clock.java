@@ -37,9 +37,7 @@ public class Clock implements Observable {
 	// it creates a menu, and it can't do that until the menus
 	// are established.
 	//
-	private Clock(){
-		createMenus();
-	}
+	private Clock(){}
 
 	private static Clock instance;
 
@@ -88,39 +86,6 @@ public class Clock implements Observable {
 	/** Create the menu that controls the clock speed and
 	 *  put it onto the menu site. 
 	 */
-	private void createMenus(){
-		// First set up a single listener that will handle all the
-		// menu-selection events except "Exit"
-
-		//{=startSetup}
-		ActionListener modifier = new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				String name = ((JMenuItem)e.getSource()).getName();
-				char toDo = name.charAt(0);
-
-				if( toDo=='D'){
-					tick();
-					tick();
-				}
-				if( toDo=='T' )
-					tick();				      // single tick
-				else{
-					startTicking(   toDo=='A' ? 500:	  // agonizing
-									toDo=='S' ? 150:	  // slow
-									toDo=='M' ? 70 :	  // medium
-									toDo=='F' ? 30 : 0 ); // fast
-				}
-			}
-		};
-																	// {=midSetup}
-		MenuSite.addLine(this,"Go","Halt",  			modifier);
-		MenuSite.addLine(this,"Go","Tick (Single Step)",modifier);
-		MenuSite.addLine(this,"Go","Double Tick (Double Step)",modifier);
-		MenuSite.addLine(this,"Go","Agonizing",	 	  	modifier);
-		MenuSite.addLine(this,"Go","Slow",		 		modifier);
-		MenuSite.addLine(this,"Go","Medium",	 	 	modifier);
-		MenuSite.addLine(this,"Go","Fast",				modifier); // {=endSetup}
-	}	//{=endCreateMenus}
 
 	private Publisher publisher = new Publisher();
 

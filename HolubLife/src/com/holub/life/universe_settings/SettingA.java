@@ -1,9 +1,11 @@
 package com.holub.life.universe_settings;
 
+import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
 import com.holub.life.view.UniverseView;
 import com.holub.ui.MenuSite;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -11,10 +13,13 @@ public class SettingA extends SampleSetting{
 
     Universe universe;
     UniverseView universeview;
+    Clock clock;
+    ActionListener modifier;
 
     public SettingA(){
         universe = Universe.getInstance();
         universeview = UniverseView.getInstance();
+        clock = Clock.getInstance();
     }
 
     @Override
@@ -54,5 +59,32 @@ public class SettingA extends SampleSetting{
                 System.exit(0);
             }
         });
+    }
+
+    @Override
+    public void clock_setting(){
+        modifier = new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                String name = ((JMenuItem)e.getSource()).getName();
+                char toDo = name.charAt(0);
+
+                if( toDo=='D'){
+                    clock.tick();
+                    clock.tick();
+                }else if( toDo=='T' )
+                    clock.tick();				      // single tick
+                else{
+                    clock.startTicking(   toDo=='A' ? 500:	  // agonizing
+                            toDo=='S' ? 150:	  // slow
+                                    toDo=='M' ? 70 :	  // medium
+                                            toDo=='F' ? 30 : 0 ); // fast
+                }
+            }
+        };
+
+        MenuSite.addLine(this,"Go","Halt",  			modifier);
+        MenuSite.addLine(this,"Go","Tick (Single Step)",modifier);
+        MenuSite.addLine(this,"Go","Double Tick (Double Step)",modifier);
+        MenuSite.addLine(this,"Go","Agonizing",	 	  	modifier);
     }
 }
