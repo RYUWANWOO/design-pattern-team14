@@ -1,4 +1,4 @@
-package com.holub.life;
+package com.holub.tools;
 
 /***
  *  The Direction class is used to indicate in just what way a
