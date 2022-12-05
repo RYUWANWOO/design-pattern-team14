@@ -16,24 +16,12 @@ import com.holub.life.model.Neighborhood;
 import com.holub.life.model.Resident;
 import com.holub.tools.Publisher;
 
-/**
- * The Universe is a mediator that sits between the Swing
- * event model and the Life classes. It is also a singleton,
- * accessed via Universe.instance(). It handles all
- * Swing events and translates them into requests to the
- * outermost Neighborhood. It also creates the Composite
- * Neighborhood.
- *
- * @include /etc/license.txt
- */
 
 public class Universe implements Observer {
     private Cell outermostCell;
     private Clock clock;
     private static final int DEFAULT_CELL_SIZE = 8;
 
-    // The constructor is private so that the universe can be created
-    // only by an outer-class method [Neighborhood.createUniverse()].
 
     public Universe(Clock clock, Cell outermostCell) {
         this.clock = clock;

@@ -37,12 +37,6 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
 
     @Override
     public void redraw(Graphics g, Rectangle here, boolean drawAll) {
-        // If the current neighborhood is stable (nothing changed
-        // in the last transition stage), then there's nothing
-        // to do. Just return. Otherwise, update the current block
-        // and all sub-blocks. Since this algorithm is applied
-        // recursively to sublocks, only those blocks that actually
-        // need to update will actually do so.
 
         boolean amActive = neighborhood.isAmActive();
         boolean oneLastRefreshRequired = neighborhood.isOneLastRefreshRequired();
