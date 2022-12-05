@@ -27,10 +27,6 @@ public class UniverseView extends JPanel implements Observer {
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                // Make sure that the cells fit evenly into the
-                // total grid size so that each cell will be the
-                // same size. For example, in a 64x64 grid, the
-                // total size must be an even multiple of 63.
 
                 Rectangle bounds = getBounds();
                 bounds.height /= universe.getWidthInCells();
