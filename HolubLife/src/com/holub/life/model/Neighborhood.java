@@ -464,6 +464,7 @@ public final class Neighborhood implements Cell, Observable {
                 grid[row][column].clear();
 
         amActive = false;
+        notifyObservers();
     }
 
     /**

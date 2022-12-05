@@ -116,6 +116,7 @@ public final class Resident implements Cell, Observable {
 
 	public void clear() {
 		amAlive = willBeAlive = false;
+		notifyObservers();
 	}
 
 	public boolean isAlive() {

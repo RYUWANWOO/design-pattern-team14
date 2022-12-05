@@ -24,7 +24,7 @@ public class SettingB extends SettingA{
         });
         MenuSite.addLine(this, "Grid", "Load",new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                //universe.doLoad();
+                universe.doLoad();
             }
         });
     }
