@@ -525,4 +525,11 @@ public final class Neighborhood implements Cell, Observable {
             return b.toString();
         }
     }
+
+    public boolean getAmActive(){
+        return this.amActive;
+    }
+    public void setAmActive(boolean b){
+        this.amActive = b;
+    }
 }
