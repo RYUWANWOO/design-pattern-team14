@@ -16,20 +16,20 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
     private CellView[][] gridView;
     private Component component;
 
-    public NeighborhoodView(Cell cell,Component component){
-        this.universe = Universe.getInstance();
-        this.neighborhood = (Neighborhood)cell;
+    public NeighborhoodView(Cell cell, Universe universe, Component component) {
+        this.universe = universe;
+        this.neighborhood = (Neighborhood) cell;
         int gridSize = this.neighborhood.getGridSize();
         this.gridView = new CellView[gridSize][gridSize];
         this.component = component;
         ((Neighborhood) cell).registerObserver(this);
 
-        for( int row = 0; row < gridSize; ++row ) {
+        for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
-                if(neighborhood.getGrid()[row][column] instanceof Neighborhood){
-                    gridView[row][column] = new NeighborhoodView(neighborhood.getGrid()[row][column],component);
-                }else{
-                    gridView[row][column] = new ResidentView(neighborhood.getGrid()[row][column],component);
+                if (neighborhood.getGrid()[row][column] instanceof Neighborhood) {
+                    gridView[row][column] = new NeighborhoodView(neighborhood.getGrid()[row][column], universe, component);
+                } else {
+                    gridView[row][column] = new ResidentView(neighborhood.getGrid()[row][column], universe, component);
                 }
             }
         }
