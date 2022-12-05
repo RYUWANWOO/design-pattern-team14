@@ -95,10 +95,6 @@ public final class Resident implements Cell, Observable {
 		return this.amAlive;
 	}
 
-	public void userClicked(Point here, Rectangle surface){
-		amAlive = !amAlive;
-	}
-
 	public void clear() {
 		amAlive = willBeAlive = false;
 		notifyObservers();

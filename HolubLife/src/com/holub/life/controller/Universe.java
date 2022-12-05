@@ -87,15 +87,7 @@ public class Universe implements Observer {
         return outermostCell.widthInCells();
     }
 
-    public void userClicked(Point here, Rectangle surface) {
-        outermostCell.userClicked(here, surface);
-    }
-
     public void clear() {
         outermostCell.clear();
-    }
-
-    public Cell getOutermostCell() {
-        return this.outermostCell;
     }
 }

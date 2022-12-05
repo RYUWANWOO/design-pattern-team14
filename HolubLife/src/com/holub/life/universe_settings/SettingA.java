@@ -23,29 +23,29 @@ public class SettingA extends SampleSetting{
         this.universeview = universeView;
         clock = Clock.getInstance();
     }
-
-    @Override
-    public void view_setting(){
-        universeview.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                Rectangle bounds = universeview.getBounds();
-                bounds.height /= universe.getWidthInCells();
-                bounds.height *= universe.getWidthInCells();
-                bounds.width = bounds.height;
-                universeview.setBounds(bounds);
-            }
-        });
-
-        universeview.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                Rectangle bounds = universeview.getBounds();
-                bounds.x = 0;
-                bounds.y = 0;
-                universe.userClicked(e.getPoint(), bounds);
-                universeview.repaint();
-            }
-        });
-    }
+//
+//    @Override
+//    public void view_setting(){
+//        universeview.addComponentListener(new ComponentAdapter() {
+//            public void componentResized(ComponentEvent e) {
+//                Rectangle bounds = universeview.getBounds();
+//                bounds.height /= universe.getWidthInCells();
+//                bounds.height *= universe.getWidthInCells();
+//                bounds.width = bounds.height;
+//                universeview.setBounds(bounds);
+//            }
+//        });
+//
+//        universeview.addMouseListener(new MouseAdapter() {
+//            public void mousePressed(MouseEvent e) {
+//                Rectangle bounds = universeview.getBounds();
+//                bounds.x = 0;
+//                bounds.y = 0;
+//                universe.userClicked(e.getPoint(), bounds);
+//                universeview.repaint();
+//            }
+//        });
+//    }
 
     @Override
     public void menu_setting(){
