@@ -12,10 +12,10 @@ public class SettingB extends SettingA{
     public SettingB(Universe universe, Cell cell, UniverseView universeView){
         super(universe,cell,universeView);
     }
-    @Override
-    public void view_setting(){
-        super.view_setting();
-    }
+//    @Override
+//    public void view_setting(){
+//        super.view_setting();
+//    }
 
     @Override
     public void menu_setting(){

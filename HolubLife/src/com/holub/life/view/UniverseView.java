@@ -6,6 +6,10 @@ import com.holub.life.controller.Universe;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UniverseView extends JPanel implements Observer {
     private final Universe universe;
@@ -21,11 +25,36 @@ public class UniverseView extends JPanel implements Observer {
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
                 universe.getWidthInCells() * DEFAULT_CELL_SIZE);
 
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                // Make sure that the cells fit evenly into the
+                // total grid size so that each cell will be the
+                // same size. For example, in a 64x64 grid, the
+                // total size must be an even multiple of 63.
+
+                Rectangle bounds = getBounds();
+                bounds.height /= universe.getWidthInCells();
+                bounds.height *= universe.getWidthInCells();
+                bounds.width = bounds.height;
+                setBounds(bounds);
+            }
+        });
+
         setBackground(Color.white);
         setPreferredSize(PREFERRED_SIZE);
         setMaximumSize(PREFERRED_SIZE);
         setMinimumSize(PREFERRED_SIZE);
         setOpaque(true);
+
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                Rectangle bounds = getBounds();
+                bounds.x = 0;
+                bounds.y = 0;
+                cellView.userClicked(e.getPoint(), bounds);
+                repaint();
+            }
+        });
     }
 
     public void paint(Graphics g) {

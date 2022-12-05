@@ -99,4 +99,21 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
     public void update() {
         component.repaint();
     }
+
+    public void userClicked(Point here, Rectangle surface) {
+        int pixelsPerCell = surface.width / neighborhood.getGridSize();
+        int row = here.y / pixelsPerCell;
+        int column = here.x / pixelsPerCell;
+        int rowOffset = here.y % pixelsPerCell;
+        int columnOffset = here.x % pixelsPerCell;
+
+        Point position = new Point(columnOffset, rowOffset);
+        Rectangle subcell = new Rectangle(0, 0, pixelsPerCell,
+                pixelsPerCell);
+
+
+        gridView[row][column].userClicked(position, subcell); //{=Neighborhood.userClicked.call}
+        neighborhood.setAmActive(true);
+        neighborhood.rememberThatCellAtEdgeChangedState(row, column);
+    }
 }

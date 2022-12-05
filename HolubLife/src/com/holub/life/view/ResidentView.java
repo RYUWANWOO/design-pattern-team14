@@ -44,4 +44,9 @@ public class ResidentView extends JPanel implements CellView, Observer {
     public void update() {
         component.repaint();
     }
+
+
+    public void userClicked(Point here, Rectangle surface){
+        resident.setAmALive(!resident.getAmALive());
+    }
 }

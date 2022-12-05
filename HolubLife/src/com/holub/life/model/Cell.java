@@ -38,20 +38,7 @@ public interface Cell {
 	 *  @return true if a changed of state happened during the transition.
 	 */
 	boolean transition();
-
-	/** A user has clicked somewhere within you.
-	 *  @param here The position of the click relative to the bounding
-	 *  			rectangle of the current Cell.
-	 */
-
-	void userClicked(Point here, Rectangle surface);
-
-	/** Return true if this cell or any subcells are alive.
-	 */
 	boolean isAlive();
-
-	/** Return the specified width plus the current cell's width
-	 */
 	int widthInCells();
 
 	/** Return a fresh (newly created) object identical to yourself

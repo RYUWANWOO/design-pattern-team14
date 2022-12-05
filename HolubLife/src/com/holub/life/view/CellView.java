@@ -9,4 +9,5 @@ import java.awt.*;
 
 public interface CellView{
     public void redraw(Graphics g, Rectangle here, boolean drawAll);
+    public void userClicked(Point here, Rectangle surface);
 }

@@ -29,10 +29,10 @@ public class DummyCell implements Cell{
     public boolean transition() {
         return false;
     }
-
-    @Override
-    public void userClicked(Point here, Rectangle surface) {
-    }
+//
+//    @Override
+//    public void userClicked(Point here, Rectangle surface) {
+//    }
 
     @Override
     public boolean isAlive() {
