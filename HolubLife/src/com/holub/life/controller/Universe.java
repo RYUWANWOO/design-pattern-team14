@@ -28,43 +28,17 @@ import com.holub.tools.Publisher;
  */
 
 public class Universe implements Observer {
-    private final Cell outermostCell;
-
-    /**
-     * The default height and width of a Neighborhood in cells.
-     * If it's too big, you'll run too slowly because
-     * you have to update the entire block as a unit, so there's more
-     * to do. If it's too small, you have too many blocks to check.
-     * I've found that 8 is a good compromise.
-     */
-    private static final int DEFAULT_GRID_SIZE = 8;
-
-    /**
-     * The size of the smallest "atomic" cell---a Resident object.
-     * This size is extrinsic to a Resident (It's passed into the
-     * Resident's "draw yourself" method.
-     */
+    private Cell outermostCell;
+    private Clock clock;
     private static final int DEFAULT_CELL_SIZE = 8;
 
     // The constructor is private so that the universe can be created
     // only by an outer-class method [Neighborhood.createUniverse()].
 
-    private Universe() {
-        // Create the nested Cells that comprise the "universe." A bug
-        // in the current implementation causes the program to fail
-        // miserably if the overall size of the grid is too big to fit
-        // on the screen.
-        outermostCell = new Neighborhood(DEFAULT_GRID_SIZE,
-                new Neighborhood(DEFAULT_GRID_SIZE, new Resident()));
+    public Universe(Clock clock, Cell outermostCell) {
+        this.clock = clock;
+        this.outermostCell = outermostCell;
         Clock.getInstance().registerObserver(this);
-    }
-
-    public static Universe getInstance() {
-        return LazyHolder.INSTANCE;
-    }
-
-    private static class LazyHolder {
-        private static final Universe INSTANCE = new Universe();
     }
 
     @Override

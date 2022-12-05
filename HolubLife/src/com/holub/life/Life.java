@@ -5,6 +5,9 @@ import javax.swing.*;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
+import com.holub.life.model.Cell;
+import com.holub.life.model.Neighborhood;
+import com.holub.life.model.Resident;
 import com.holub.life.universe_settings.SampleSetting;
 import com.holub.life.universe_settings.SettingA;
 import com.holub.life.universe_settings.SettingB;
@@ -17,29 +20,29 @@ import com.holub.ui.MenuSite;
  * @include /etc/license.txt
  */
 public final class Life extends JFrame {
+    private static final int DEFAULT_GRID_SIZE = 8;
+
     public static void main(String[] arguments) {
         new Life();
     }
 
     private Life() {
         //제목을 정해요 - 건들 필요 없고
-        super("The Game of Life. "
-                + "(c)2003 Allen I. Holub <http://www.holub.com>");
-
-        //menusite로 시작을 한다 -> 수정해야 할 게 menusite라는 것을 알 수 있다.
-
+        super("The Game of Life. " + "(c)2003 Allen I. Holub <http://www.holub.com>");
 
         MenuSite.establish(this);        //{=life.java.establish}
 
-        Universe universe = Universe.getInstance();
-        UniverseView universeview = UniverseView.getInstance();
+        Clock clock = Clock.getInstance();
+        Cell outermostCell = new Neighborhood(DEFAULT_GRID_SIZE, new Neighborhood(DEFAULT_GRID_SIZE, new Resident()));
+        Universe universe = new Universe(clock,outermostCell);
+        UniverseView universeview = new UniverseView(universe, outermostCell);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(universeview, BorderLayout.CENTER); //{=life.java.install}
 
         //리스너를 더해요
-        SampleSetting now_setting = new SettingB();
+        SampleSetting now_setting = new SettingB(universe, outermostCell, universeview);
         now_setting.establish();
 
         //pack()은 프레임내에 서브컴포넌트들의 레이아웃과 Prefered Size에

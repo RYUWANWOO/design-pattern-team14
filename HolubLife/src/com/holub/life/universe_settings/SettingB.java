@@ -1,6 +1,7 @@
 package com.holub.life.universe_settings;
 
 import com.holub.life.controller.Universe;
+import com.holub.life.model.Cell;
 import com.holub.life.view.UniverseView;
 import com.holub.ui.MenuSite;
 
@@ -8,6 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SettingB extends SettingA{
+    public SettingB(Universe universe, Cell cell, UniverseView universeView){
+        super(universe,cell,universeView);
+    }
     @Override
     public void view_setting(){
         super.view_setting();

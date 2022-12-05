@@ -13,10 +13,10 @@ public class UniverseView extends JPanel implements Observer {
     private Cell cell;
     private static final int DEFAULT_CELL_SIZE = 8;
 
-    private UniverseView() {
-        this.universe = Universe.getInstance();
-        this.cell = universe.getOutermostCell();
-        this.cellView = new NeighborhoodView(cell, this);
+    public UniverseView(Universe universe, Cell cell) {
+        this.universe = universe;
+        this.cell = cell;
+        this.cellView = new NeighborhoodView(cell, universe, this);
 
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
                 universe.getWidthInCells() * DEFAULT_CELL_SIZE);
@@ -26,14 +26,6 @@ public class UniverseView extends JPanel implements Observer {
         setMaximumSize(PREFERRED_SIZE);
         setMinimumSize(PREFERRED_SIZE);
         setOpaque(true);
-    }
-
-    public static UniverseView getInstance() {
-        return UniverseView.LazyHolder.INSTANCE;
-    }
-
-    private static class LazyHolder {
-        private static final UniverseView INSTANCE = new UniverseView();
     }
 
     public void paint(Graphics g) {

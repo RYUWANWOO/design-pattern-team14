@@ -2,6 +2,7 @@ package com.holub.life.universe_settings;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
+import com.holub.life.model.Cell;
 import com.holub.life.view.UniverseView;
 import com.holub.ui.MenuSite;
 
@@ -10,15 +11,16 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class SettingA extends SampleSetting{
-
     Universe universe;
     UniverseView universeview;
     Clock clock;
     ActionListener modifier;
+    Cell cell;
 
-    public SettingA(){
-        universe = Universe.getInstance();
-        universeview = UniverseView.getInstance();
+    public SettingA(Universe universe, Cell cell, UniverseView universeView){
+        this.universe = universe;
+        this.cell = cell;
+        this.universeview = universeView;
         clock = Clock.getInstance();
     }
 
