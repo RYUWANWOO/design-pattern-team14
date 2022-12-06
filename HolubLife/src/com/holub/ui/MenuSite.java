@@ -99,15 +99,15 @@ import javax.swing.*;
 
 public final class MenuSite
 {
-	private static JFrame		menuFrame	= null;
-	private static JMenuBar		menuBar  	= null;
+	private  JFrame		menuFrame	    = null;
+	private  JMenuBar		menuBar  	= null;
 
 	/*** The "requesters" table keeps track of who requested which
 	 * menu items. It is indexed by requester and contains a
 	 * Set of MenuSite.Item objects that identify all
 	 * items added by that requester.
 	 */
-	private static Map requesters = new HashMap();
+	private Map requesters = new HashMap();
 
 	/*** Maps "names" to the visible labels that actually
 	 *  appear on the screen.
@@ -158,14 +158,34 @@ public final class MenuSite
 	 *	will appear on the screen (left to right).
 	 */
 
-	private static final LinkedList menuBarContents =
-												new LinkedList();
+	private static final LinkedList<Item> menuBarContents =
+												new LinkedList<>();
+
+	public LinkedList<Item> getMenuBarContents(){
+		return menuBarContents;
+	}
+
+	public void setMenuFrame(JFrame menuFrame) {
+		this.menuFrame = menuFrame;
+	}
+
+	public void setMenuBar(JMenuBar menuBar) {
+		this.menuBar = menuBar;
+	}
+
+	public JFrame getMenuFrame() {
+		return menuFrame;
+	}
+
+	public JMenuBar getMenuBar() {
+		return menuBar;
+	}
 
 	/*** ***************************************************************
 	 * MenuSite is a singleton. A private constructor prevents
 	 * you from manufacturing one using <code>new</code>.
 	 */
-	private MenuSite(){}
+	public MenuSite(){}
 
 	/*** Check the current object for validity. If you use this
 	 *  method in an assertion ("assert valid()") then it will
@@ -174,7 +194,7 @@ public final class MenuSite
 	 *  //@throws AssertionException if the menu hasn't been established.
 	 */
 
-	private static boolean valid()
+	private boolean valid()
 	{	assert menuFrame != null : "MenuSite not established";
 		assert menuBar   != null : "MenuSite not established";
 		return true;
@@ -186,7 +206,7 @@ public final class MenuSite
 	 * (Most of these will throw a {@link NullPointerException}
 	 * if you try to use them when no menu site has been established.)
 	 */
-	public synchronized static void establish(JFrame container)
+	public synchronized void establish(JFrame container)
 	{
 		assert container != null;
 		assert menuFrame == null:
@@ -254,7 +274,7 @@ public final class MenuSite
 	 *  		(e.g. has spaces in it) or if the specifier identifies
 	 *  		an existing line item (as compared to a menu).
 	 */
-	public static void addMenu( Object requester, String menuSpecifier )
+	public void addMenu( Object requester, String menuSpecifier )
 	{	createSubmenuByName( requester, menuSpecifier );
 	}
 
@@ -304,7 +324,7 @@ public final class MenuSite
 	 *	@see #addMenu
 	 *  @see #mapNames
 	 */
-	public static void addLine(	Object requester,
+	public void addLine(	Object requester,
 								String toThisMenu,
 								String name,
 								ActionListener listener)
@@ -341,7 +361,7 @@ public final class MenuSite
 
 		Item item = new Item(element, found, toThisMenu );
 		menusAddedBy(requester).add( item );
-		item.attachYourselfToYourParent();
+		item.attachYourselfToYourParent(this);
 	}
 
 	/*** **************************************************************
@@ -361,7 +381,7 @@ public final class MenuSite
 	 *  the menu itself using {@link #addMenu addMenu(...)}.
 	 */
 
-	public static void removeMyMenus( Object requester )
+	public void removeMyMenus( Object requester )
 	{
 		assert requester != null;
 		assert valid();
@@ -388,7 +408,7 @@ public final class MenuSite
 	 * @param enable true to enable all the requester's menu items.
 	 *
 	 */
-	public static void setEnable(Object requester, boolean enable)
+	public void setEnable(Object requester, boolean enable)
 	{
 		assert requester != null;
 		assert valid();
@@ -453,7 +473,7 @@ public final class MenuSite
 	 * 						doesn't exist.
 	 */
 
-	public static JMenuItem getMyMenuItem(Object requester,
+	public JMenuItem getMyMenuItem(Object requester,
 									String menuSpecifier, String name)
 	{
 		assert requester 		!= null;
@@ -491,7 +511,7 @@ public final class MenuSite
 	 * doesn't exist, create it.
 	 * @see #addMenu
 	 */
-	private static JMenu createSubmenuByName( Object requester,
+	private JMenu createSubmenuByName( Object requester,
 												String menuSpecifier )
 	{
 		assert requester != null;
@@ -527,7 +547,7 @@ public final class MenuSite
 
 				Item item = new Item(child, parent, menuSpecifier );
 				menusAddedBy(requester).add(item);
-				item.attachYourselfToYourParent();
+				item.attachYourselfToYourParent(this);
 			}
 		}
 
@@ -541,7 +561,7 @@ public final class MenuSite
 	 *  the given "name."
 	 */
 
-	private static JMenuItem getSubmenuByName( String name,
+	private JMenuItem getSubmenuByName( String name,
 											MenuElement[] contents )
 	{
 		JMenuItem found = null;
@@ -625,7 +645,7 @@ public final class MenuSite
 	 *	@throws IOException if it can't load the table
 	 */
 
-	public static void mapNames(URL table) throws IOException
+	public void mapNames(URL table) throws IOException
 	{	if( nameMap == null )
 			nameMap = new Properties();
 		nameMap.load( table.openStream() );
@@ -648,7 +668,7 @@ public final class MenuSite
 	 * @see #mapNames
 	 */
 
-	public static void addMapping( String name, String label,
+	public void addMapping( String name, String label,
 														String shortcut)
 	{	if( nameMap == null )
 			nameMap = new Properties();
@@ -680,7 +700,7 @@ public final class MenuSite
 	 *  @see #mapNames
 	 *  @see #addLine
 	 */
-	private static void setLabelAndShortcut( JMenuItem item )
+	private void setLabelAndShortcut( JMenuItem item )
 	{	String name = item.getName();
 		if( name == null )
 			return;
@@ -740,7 +760,7 @@ public final class MenuSite
 	 * if there are no menus associated with the requester at
 	 * present.
 	 */
-	private static Collection menusAddedBy( Object requester )
+	private Collection menusAddedBy( Object requester )
 	{
 		assert requester  != null: "Bad argument"  ;
 		assert requesters != null: "No requesters" ;
@@ -761,468 +781,5 @@ public final class MenuSite
 	 * All the weirdness associated with help menus is handled
 	 * here.
 	 */
-	private static final class Item
-	{
-		// private JMenuItem  item;
-		private Component  item;
 
-		private String		parentSpecification; // of JMenu or of 
-												 // JMenuItem's parent
-		private MenuElement parent;		   		 // JMenu or JMenuBar
-		private boolean		isHelpMenu;
-
-		public String toString()
-		{	StringBuffer b = new StringBuffer(parentSpecification);
-			if( item instanceof JMenuItem )
-			{	JMenuItem i = (JMenuItem)item;
-				b.append(":");
-				b.append(i.getName());
-				b.append(" (");
-				b.append(i.getText());
-				b.append(")");
-			}
-			return b.toString();
-		}
-
-		/*------------------------------------------------------------*/
-
-		private boolean valid()
-		{	assert item 	!= null : "item is null" ;
-			assert parent	!= null : "parent is null" ;
-			return true;
-		}
-
-		/*** Create a new Item. If the JMenuItem's name is the
-		 *  string "help" then it's assumed to be the help menu and
-		 *  is treated specially. Note that several help menus can
-		 *  be added to a site: They'll be stacked up at the far
-		 *  right in the reverse order of addition. Similarly
-		 *  file menus are stacked up at the far left.
-		 *
-		 *  @param item		 the item being added
-		 *  @param parent 	 The menu bar or a menu that
-		 *  				 contains the current item. Must
-		 *  				 be a JMenuBar or a JMenu.
-		 */
-
-		public Item( Component item, MenuElement parent,
-											String parentSpecification )
-		{	assert parent != null;
-			assert parent instanceof JMenu || parent instanceof JMenuBar
-								: "Parent must be JMenu or JMenuBar";
-
-			this.item		   = item;
-			this.parent		   = parent;
-			this.parentSpecification = parentSpecification;
-			this.isHelpMenu  =
-					( item instanceof JMenuItem )
-				 && ( item.getName().compareToIgnoreCase("help")==0 );
-
-			assert valid();
-		}
-
-		public boolean specifiedBy( String specifier )
-		{	return parentSpecification.equals( specifier );
-		}
-
-		public Component item()
-		{	return item;
-		}
-
-		/*** ******************************************************
-		 * Attach a menu item to it's parent (either a menu
-		 * bar or a menu). Items are added at the end of the
-		 * <code>menuBarContents</code> list unless a help
-		 * menu exists, in which case items are added at
-		 * the penultimate position.
-		 */
-
-		public final void attachYourselfToYourParent()
-		{	assert valid();
-
-			if( parent instanceof JMenu )
-			{	((JMenu)parent).add( item );
-			}
-			else if( menuBarContents.size() <= 0 )
-			{	menuBarContents.add( this );
-				((JMenuBar)parent).add( item );
-			}
-			else
-			{	Item last = (Item)(menuBarContents.getLast());
-				if( !last.isHelpMenu )
-				{
-					menuBarContents.addLast(this);
-					((JMenuBar)parent).add( item );
-				}
-				else	// remove the help menu, add the new
-				{		// item, then put the help menu back
-						// (following the new item).
-
-					menuBarContents.removeLast();
-					menuBarContents.add( this );
-					menuBarContents.add( last );
-
-					if( parent == menuBar )
-						parent = regenerateMenuBar();
-				}
-			}
-		}
-
-		/*** ******************************************************
-		 * Remove the current menu item from its parent
-		 * (either a menu bar or a menu). The Item is invalid
-		 * after it's detached, and should be discarded.
-		 */
-		public void detachYourselfFromYourParent()
-		{	assert valid();
-
-			if( parent instanceof JMenu )
-			{	((JMenu)parent).remove( item );
-			}
-			else // the parent's the menu bar.
-			{
-				menuBar.remove( item );
-				menuBarContents.remove( this );
-				regenerateMenuBar(); // without me on it
-
-				parent = null;
-			}
-		}
-
-		/*** ******************************************************
-		 * Set or reset the "disabled" state of a menu item.
-		 */
-
-		public void setEnableAttribute( boolean on )
-		{	if( item instanceof JMenuItem )
-			{	JMenuItem item = (JMenuItem) this.item;
-				item.setEnabled( on );
-			}
-		}
-
-		/*** ******************************************************
-		 * Replace the old menu bar with a new one that reflects
-		 * the current state of the <code>menuBarContents</code>
-		 * list.
-		 */
-		private JMenuBar regenerateMenuBar()
-		{	assert valid();
-
-			// Create the new menu bar and populate it from
-			// the current-contents list.
-
-			menuBar = new JMenuBar();
-			ListIterator i = menuBarContents.listIterator(0);
-			while( i.hasNext() )
-				menuBar.add( ((Item)(i.next())).item );
-
-			// Replace the old menu bar with the new one.
-			// Calling setVisible causes the menu bar to be
-			// redrawn with a minimum amount of flicker. Without
-			// it, the redraw doesn't happen at all.
-
-			menuFrame.setJMenuBar( menuBar );
-			menuFrame.setVisible( true );
-			return menuBar;
-		}
-	}
-
-	/*** ***************************************************************
-	 * This class holds methods of interest only when you're
-	 * debugging. Don't include the associated class file in
-	 * the released version of the code.
-	 */
-
-	private static class Debug
-	{
-		public interface Visitor
-		{	public void visit(JMenu e,int depth);
-		}
-
-		private static int traversalDepth = -1;
-
-		/*** *******************************************************
-		 *  Traverse the menu system post order (submenus are alwawys
-		 *  traversed before their menus. The Visitor is invoked at
-		 *  every internal node (at the menus, not the line items).
-		 *	When debuging. You can print the menu tree with:
-		 *	<PRE>
-			MenuSite.visitPostorder
-			(	MenuSite.menuBar,
-				new Visitor()
-				{	public void visit( JMenu m, int depth )
-					{	while( --depth &gt;= 0 )
-							System.out.print("....");
-						System.out.println( m.getName() );
-					}
-				}
-			);
-		 *  </PRE>
-		 */
-
-		public static void visitPostorder( MenuElement me, Visitor v )
-		{
-			// If it's actually a JMenuItem (as compared to a
-			// JMenuItem derivative such as a JMenu), then it's
-			// a leaf node and has no children.
-
-			if( me.getClass() != JMenuItem.class )
-			{	MenuElement[] contents = me.getSubElements();
-				for( int i=0; i < contents.length; ++i )
-				{
-					if( contents[i].getClass() != JMenuItem.class )
-					{	++traversalDepth;
-						visitPostorder( contents[i], v );
-						if( !(contents[i] instanceof JPopupMenu) )
-							v.visit((JMenu)contents[i], traversalDepth);
-						--traversalDepth;
-					}
-
-				}
-			}
-		}
-	}
-
-	/*** *************************************************************
-	 * This inner class tests the MenuSite. Do not
-	 * Ship MenuSite$Test.class with your applications. Test the
-	 * code by invoking "java com.holub.tools.MenuSite\$Test".
-	 * The test code creates three menus:
-	 * <ul>
-	 * <li> A Help menu that contains three line items, each added in
-	 * 		a different way. Nothing happens when these are selected.
-	 * <li>	A "Removal" menu that disappears when selected.
-	 * <li> A "Main" menu that initially contains a single line item
-	 *		called "Add an Item." Selecting this item adds a "Remove
-	 *		Menus" Item to the "Main" menu. Selecting that removes
-	 *		both the Main and Help (but not the "Removal") menus.
-	 * </ul>
-	 * I don't like the fact that this test is interactive, since
-	 * interactive testing can't be automated.
-	 */
-	public static class Test extends JFrame
-	{
-		static Test	instance; // = new Test();
-		static boolean isDisabled1 = false;
-		static boolean isDisabled2 = false;
-
-		Test()
-		{
-			setSize( 400, 200 );
-			addWindowListener
-			(	new WindowAdapter()
-				{	public void windowClosing( WindowEvent e )
-					{	System.exit(1);
-					}
-				}
-			);
-			MenuSite.establish( this );
-			show();
-		}
-
-		//------------------------------------------------------------
-		static class RemoveListener implements ActionListener
-		{	public void actionPerformed( ActionEvent e )
-			{	MenuSite.removeMyMenus( instance );
-			}
-		}
-		//------------------------------------------------------------
-
-		static public void main( String[] args ) throws Exception
-		{
-			/*
-			com.holub.tools.Log.toScreen("com.holub.ui");
-			UIManager.setLookAndFeel(
-				UIManager.getSystemLookAndFeelClassName() );
-
-			instance = new Test();
-
-			// Create a generic reporter.
-
-			ActionListener reportIt =
-					new ActionListener()
-					{	public void actionPerformed(ActionEvent e)
-						{	JMenuItem item = (JMenuItem)(e.getSource());
-							System.out.println( item.getText() );
-						}
-					};
-
-
-			// Create the File menu first.
-
-			ActionListener terminator =
-				new ActionListener()
-				{	public void actionPerformed( ActionEvent e )
-					{	System.exit(0);
-					}
-				};
-
-			// Make the file menu with it's own ID so that the removal
-			// test in the main menu doesn't remove it.
-
-			Object fileId = new Object();
-			MenuSite.addMenu(fileId, "File" );
-			MenuSite.addLine(fileId, "File", "Quit", terminator);
-			MenuSite.addLine(fileId, "File", "Bye",  terminator);
-
-			// Now, make a few more menus.
-
-			MenuSite.addMenu(instance, "Main" );
-			MenuSite.addLine
-			(	instance, "Main", "Add Line Item to Menu",
-				new ActionListener()
-				{	public void actionPerformed( ActionEvent e )
-					{	MenuSite.addLine(instance, "Main",
-							"Remove Main and Help menus",
-							new ActionListener()
-							{ public void actionPerformed(ActionEvent e)
-							  {  MenuSite.removeMyMenus(instance);
-							  }
-							}
-						);
-					}
-				}
-			);
-
-			//---------------------------------------------------------
-			MenuSite.addLine( instance, "Main", "-", null );
-			//---------------------------------------------------------
-			final Object disable1 = new Object();
-
-			MenuSite.addLine(	instance, "Main", "Toggle1",
-				new ActionListener()
-				{	public void actionPerformed( ActionEvent e )
-					{	isDisabled1 = !isDisabled1;
-						MenuSite.setEnable( disable1, !isDisabled1 );
-						MenuSite.getMyMenuItem(instance,
-											  "Main", "Toggle1").
-							setText
-							(	isDisabled1 ? "Enable following Item"
-											: "Disable following Item"
-							);
-
-					}
-				}
-			);
-			MenuSite.getMyMenuItem(instance, "Main", "Toggle1").
-									setText("Disable following Item");
-
-			MenuSite.addLine(disable1, "Main", "Disableable", reportIt);
-
-			// - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-			final Object disable2 = new Object();
-
-			MenuSite.addLine(	instance, "Main", "Toggle2",
-				new ActionListener()
-				{	public void actionPerformed( ActionEvent e )
-					{	isDisabled2 = !isDisabled2;
-						MenuSite.setEnable( disable2, !isDisabled2 );
-						MenuSite.getMyMenuItem(instance,
-												"Main", "Toggle2").
-							setText
-							(	isDisabled2 ? "Enable following Item"
-											: "Disable following Item"
-							);
-					}
-				}
-			);
-			MenuSite.getMyMenuItem(instance, "Main", "Toggle2").
-									setText("Disable following Item");
-			MenuSite.addLine(disable2, "Main", "Disableable", reportIt);
-
-			//--------------------------------------------------------
-
-			// Check that a single line item can be removed
-
-			final Object id = new Object();
-
-			MenuSite.addLine( id, "Main", "-", null );
-			MenuSite.addLine
-			(	id, "Main", "Remove this item & separator line",
-				new ActionListener()
-				{	public void actionPerformed( ActionEvent e )
-					{	MenuSite.removeMyMenus( id );
-					}
-				}
-			);
-
-			// Check out submenus. Create two of them, one in two
-			// steps and the other in a single step. Then add items
-			// that remove the submenus to make sure that removal works
-			// correctly.
-
-			MenuSite.addLine(instance,"Main", "-", null );
-			MenuSite.addLine(instance,
-					"Main:Submenu1", "Submenu One Item", reportIt );
-			MenuSite.addLine(instance,
-					"Main:Submenu2", "Submenu Two Item", reportIt );
-			MenuSite.addLine(instance,
-					"Main:Submenu3", "Submenu Three Item", reportIt );
-			MenuSite.addLine(instance,
-					"Main:Submenu2:SubSubmenu2",
-					"Sub-Submenu Two Item", reportIt );
-
-			MenuSite.addLine(instance,
-					"Main:Submenu3:SubSubmenu3",
-					"Sub-Submenu Three Item", reportIt );
-
-			MenuSite.addLine(instance,
-					"Main:Submenu3:SubSubmenu3:SubSubSubmenu3",
-					"Sub-Sub-Submenu Three Item", reportIt );
-
-			MenuSite.addLine(instance, "Main", "-", null );
-
-			// Check that the map file works correctly.
-			// Items 5 and 6 are deliberately malformed in the map
-			// file and will cause an error to be logged.
-			// item.7 doesn't exist in the file.
-
-			MenuSite.mapNames(
-			   new URL("file://c:/src/com/holub/ui/test/menu.map.txt"));
-
-			MenuSite.addLine( instance, "Main", "item.1", reportIt );
-			MenuSite.addLine( instance, "Main", "item.2", reportIt );
-			MenuSite.addLine( instance, "Main", "item.3", reportIt );
-			MenuSite.addLine( instance, "Main", "item.4", reportIt );
-			MenuSite.addLine( instance, "Main", "item.5", reportIt );
-			MenuSite.addLine( instance, "Main", "item.6", reportIt );
-			MenuSite.addLine( instance, "Main", "item.7", reportIt );
-
-			// Create a help menu. Do it in the middle of things
-			// to make sure that it ends up on the far right.
-			// Use all three mechanisms for adding menu items directly
-			// using the menu's "name," and using the menu's "text").
-
-			MenuSite.addLine( instance, "Help", "Get Help", reportIt );
-
-			// Create a second "requester" and have it add a Removal
-			// menu with the name RemovalMenu. Picking that menu
-			// will remove only the menu for the current requester.
-			// Do this after doing the help menu to make sure that
-			// it's inserted in the right place.
-
-			final Object x = new Object();
-			MenuSite.addLine
-			(	x,
-				"Removal", "Select to Remove Removal menu",
-				new ActionListener()
-				{	public void actionPerformed(ActionEvent e)
-					{	MenuSite.removeMyMenus(x);
-					}
-				}
-			);*/
-		}
-	}
 }
-
-/// TODO: 
-///
-/// Check to make sure that a menu is not removed, even if its added
-/// by a requester, if it holds line items added by other requesters.
-/// (Only the line items for a specific requester should be removed]
-/// in that case.)
-///
-/// Possible improvement:
-//  Stack existing menus and menu items if you add one with the same
-/// name. Restore old item from the stack when menu reverts to previous
-/// state.

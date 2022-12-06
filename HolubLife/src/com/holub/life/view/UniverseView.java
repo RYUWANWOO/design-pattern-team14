@@ -1,8 +1,12 @@
 package com.holub.life.view;
 
+import com.holub.life.controller.Clock;
 import com.holub.life.model.Cell;
 import com.holub.tools.Observer;
 import com.holub.life.controller.Universe;
+import com.holub.ui.ClockMenu;
+import com.holub.ui.GridMenu;
+import com.holub.ui.MenuSite;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +21,21 @@ public class UniverseView extends JPanel implements Observer {
     private Cell cell;
     private static final int DEFAULT_CELL_SIZE = 8;
 
-    public UniverseView(Universe universe, Cell cell) {
+    public UniverseView(MenuSite menuSite, Universe universe, Cell cell, Clock clock) {
         this.universe = universe;
         this.cell = cell;
         this.cellView = new NeighborhoodView(cell, universe, this);
 
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
                 universe.getWidthInCells() * DEFAULT_CELL_SIZE);
+
+
+        GridMenu gridMenu = new GridMenu(menuSite,this,universe);
+        ClockMenu clockMenu = new ClockMenu(clock,menuSite);
+
+        gridMenu.setup();
+        clockMenu.setup();
+
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -35,6 +47,7 @@ public class UniverseView extends JPanel implements Observer {
                 setBounds(bounds);
             }
         });
+
 
         setBackground(Color.white);
         setPreferredSize(PREFERRED_SIZE);
@@ -49,6 +62,7 @@ public class UniverseView extends JPanel implements Observer {
                 bounds.y = 0;
                 cellView.userClicked(e.getPoint(), bounds);
                 repaint();
+
             }
         });
     }
