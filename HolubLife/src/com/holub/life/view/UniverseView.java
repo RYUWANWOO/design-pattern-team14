@@ -7,6 +7,7 @@ import com.holub.life.controller.Universe;
 import com.holub.ui.ClockMenu;
 import com.holub.ui.GridMenu;
 import com.holub.ui.MenuSite;
+import com.holub.ui.UndoMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,9 +32,12 @@ public class UniverseView extends JPanel{
 
         GridMenu gridMenu = new GridMenu(menuSite,this,this.universe);
         ClockMenu clockMenu = new ClockMenu(clock,menuSite);
+        UndoMenu undoMenu = new UndoMenu(menuSite,universe);
 
         gridMenu.setup();
         clockMenu.setup();
+        undoMenu.setup();
+
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
