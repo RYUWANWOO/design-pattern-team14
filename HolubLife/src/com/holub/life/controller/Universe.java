@@ -3,6 +3,7 @@ package com.holub.life.controller;
 import java.io.*;
 
 import java.awt.*;
+import java.util.Stack;
 import javax.swing.*;
 
 import com.holub.io.Files;
@@ -28,9 +29,20 @@ public class Universe implements Observer {
         this.clock.registerObserver(this);
     }
 
+    private Stack<Storable> clickedCached = new Stack<>();
+
     @Override
     public void update() {
+        clickedCached.push(outermostCell.createMemento());
         outermostCell.tick();
+    }
+
+    public void doUndo() throws IOException{
+        if(!clickedCached.isEmpty()){
+            Clock.getInstance().stop();
+            outermostCell.clear();
+            outermostCell.transfer(clickedCached.pop(),new Point(0,0),Cell.LOAD);
+        }
     }
 
     public void doLoad() {
@@ -75,6 +87,7 @@ public class Universe implements Observer {
     }
 
     public void clear() {
+        clickedCached.clear();
         outermostCell.clear();
     }
 }
