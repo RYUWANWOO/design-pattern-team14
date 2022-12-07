@@ -1,7 +1,6 @@
 package com.holub.life;
 
 import java.awt.*;
-import java.util.LinkedList;
 import javax.swing.*;
 
 import com.holub.life.controller.Clock;
@@ -10,9 +9,7 @@ import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
 import com.holub.life.model.Resident;
 import com.holub.life.view.UniverseView;
-import com.holub.ui.ClockMenu;
-import com.holub.ui.GridMenu;
-import com.holub.ui.MenuSite;
+import com.holub.life.view.menu.MenuSite;
 
 /*******************************************************************
  * An implemenation of Conway's Game of Life.

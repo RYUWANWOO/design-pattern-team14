@@ -2,11 +2,14 @@ package com.holub.life.view;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.model.Cell;
+import com.holub.life.view.cell.CellView;
+import com.holub.life.view.cell.NeighborhoodView;
 import com.holub.tools.Observer;
 import com.holub.life.controller.Universe;
-import com.holub.ui.ClockMenu;
-import com.holub.ui.GridMenu;
-import com.holub.ui.MenuSite;
+import com.holub.life.view.menu.ClockMenu;
+import com.holub.life.view.menu.GridMenu;
+import com.holub.life.view.menu.MenuSite;
+import com.holub.life.view.menu.UndoMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,22 +27,22 @@ public class UniverseView extends JPanel implements Observer {
     public UniverseView(MenuSite menuSite, Universe universe, Cell cell, Clock clock) {
         this.universe = universe;
         this.cell = cell;
-        this.cellView = new NeighborhoodView(cell, universe, this);
+        this.cellView = new NeighborhoodView(cell, this);
 
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
                 universe.getWidthInCells() * DEFAULT_CELL_SIZE);
 
-
         GridMenu gridMenu = new GridMenu(menuSite,this,universe);
         ClockMenu clockMenu = new ClockMenu(clock,menuSite);
+        UndoMenu undoMenu = new UndoMenu(menuSite,universe);
 
         gridMenu.setup();
         clockMenu.setup();
+        undoMenu.setup();
 
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-
                 Rectangle bounds = getBounds();
                 bounds.height /= universe.getWidthInCells();
                 bounds.height *= universe.getWidthInCells();
@@ -47,7 +50,6 @@ public class UniverseView extends JPanel implements Observer {
                 setBounds(bounds);
             }
         });
-
 
         setBackground(Color.white);
         setPreferredSize(PREFERRED_SIZE);
@@ -62,7 +64,6 @@ public class UniverseView extends JPanel implements Observer {
                 bounds.y = 0;
                 cellView.userClicked(e.getPoint(), bounds);
                 repaint();
-
             }
         });
     }

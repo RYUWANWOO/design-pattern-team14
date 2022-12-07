@@ -1,43 +1,37 @@
-package com.holub.life.view;
+package com.holub.life.view.cell;
 
 import com.holub.asynch.ConditionVariable;
-import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
+import com.holub.life.view.UniverseView;
 import com.holub.tools.Observer;
-import com.holub.ui.Colors;
+import com.holub.tools.CellViewFactory;
+import com.holub.life.view.Colors;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class NeighborhoodView extends JPanel implements Observer, CellView {
-    private Universe universe;
     private Neighborhood neighborhood;
+    private UniverseView universeView;
     private CellView[][] gridView;
-    private Component component;
 
-    public NeighborhoodView(Cell cell, Universe universe, Component component) {
-        this.universe = universe;
+    public NeighborhoodView(Cell cell, UniverseView universeView) {
         this.neighborhood = (Neighborhood) cell;
         int gridSize = this.neighborhood.getGridSize();
         this.gridView = new CellView[gridSize][gridSize];
-        this.component = component;
-        ((Neighborhood) cell).registerObserver(this);
+        this.universeView = universeView;
+        neighborhood.registerObserver(this);
 
         for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
-                if (neighborhood.getGrid()[row][column] instanceof Neighborhood) {
-                    gridView[row][column] = new NeighborhoodView(neighborhood.getGrid()[row][column], universe, component);
-                } else {
-                    gridView[row][column] = new ResidentView(neighborhood.getGrid()[row][column], universe, component);
-                }
+                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column],universeView);
             }
         }
     }
 
     @Override
     public void redraw(Graphics g, Rectangle here, boolean drawAll) {
-
         boolean amActive = neighborhood.isAmActive();
         boolean oneLastRefreshRequired = neighborhood.isOneLastRefreshRequired();
         ConditionVariable readingPermitted = neighborhood.getReadingPermitted();
@@ -91,7 +85,7 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
 
     @Override
     public void update() {
-        component.repaint();
+        universeView.repaint();
     }
 
     public void userClicked(Point here, Rectangle surface) {
@@ -102,9 +96,7 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
         int columnOffset = here.x % pixelsPerCell;
 
         Point position = new Point(columnOffset, rowOffset);
-        Rectangle subcell = new Rectangle(0, 0, pixelsPerCell,
-                pixelsPerCell);
-
+        Rectangle subcell = new Rectangle(0, 0, pixelsPerCell, pixelsPerCell);
 
         gridView[row][column].userClicked(position, subcell); //{=Neighborhood.userClicked.call}
         neighborhood.setAmActive(true);

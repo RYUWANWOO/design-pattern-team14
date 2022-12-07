@@ -1,10 +1,10 @@
-package com.holub.life.view;
+package com.holub.life.view.cell;
 
-import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Resident;
+import com.holub.life.view.UniverseView;
 import com.holub.tools.Observer;
-import com.holub.ui.Colors;
+import com.holub.life.view.Colors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +14,12 @@ public class ResidentView extends JPanel implements CellView, Observer {
     private static final Color LIVE_COLOR = Color.RED;
     private static final Color DEAD_COLOR = Colors.LIGHT_YELLOW;
 
-    private Universe universe;
     private Resident resident;
-    private Component component;
+    private UniverseView universeView;
 
-    public ResidentView(Cell cell, Universe universe, Component component) {
-        this.universe = universe;
+    public ResidentView(Cell cell, UniverseView universeView) {
         this.resident = (Resident) cell;
-        this.component = component;
+        this.universeView = universeView;
         resident.registerObserver(this);
     }
 
@@ -38,11 +36,10 @@ public class ResidentView extends JPanel implements CellView, Observer {
 
     @Override
     public void update() {
-        component.repaint();
+        universeView.repaint();
     }
 
-
-    public void userClicked(Point here, Rectangle surface){
+    public void userClicked(Point here, Rectangle surface) {
         resident.setAmALive(!resident.getAmALive());
     }
 }

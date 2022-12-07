@@ -3,8 +3,7 @@ package com.holub.life.model;
 import java.awt.*;
 
 import com.holub.tools.*;
-import com.holub.ui.Colors;	// Contains constants specifying various
-							// colors not defined in java.awt.Color.
+// colors not defined in java.awt.Color.
 
 
 /*** ****************************************************************
