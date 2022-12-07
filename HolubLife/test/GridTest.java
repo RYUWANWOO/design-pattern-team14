@@ -2,16 +2,14 @@ import com.holub.life.controller.Clock;
 import com.holub.life.controller.Universe;
 import com.holub.life.model.Neighborhood;
 import com.holub.life.model.Resident;
-import com.holub.life.model.Cell;
 
-import com.holub.life.view.UniverseView;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TickTest {
+class GridTest {
     @DisplayName("Oscillator single tick test")
     @Test
     void OscillatorSingleTick() {
@@ -59,5 +57,19 @@ class TickTest {
                 () -> assertTrue(((Resident) oscillator.getGrid()[1][2]).isAmAlive()),
                 () -> assertTrue(((Resident) oscillator.getGrid()[1][3]).isAmAlive())
         );
+    }
+
+    @DisplayName("Oscillator halt test")
+    @Test
+    void OscillatorHalt() {
+        Clock clock = Clock.getInstance();
+
+        Neighborhood oscillator = new Neighborhood(8, new Resident());
+        oscillator.setAmActive(true);
+        ((Resident) oscillator.getGrid()[1][1]).setAmALive(true);
+        ((Resident) oscillator.getGrid()[1][2]).setAmALive(true);
+        ((Resident) oscillator.getGrid()[1][3]).setAmALive(true);
+
+        Universe oscUniverse = new Universe(clock, oscillator);
     }
 }
