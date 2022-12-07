@@ -29,17 +29,14 @@ public class UniverseView extends JPanel implements Observer {
         final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
                 universe.getWidthInCells() * DEFAULT_CELL_SIZE);
 
-
         GridMenu gridMenu = new GridMenu(menuSite,this,universe);
         ClockMenu clockMenu = new ClockMenu(clock,menuSite);
 
         gridMenu.setup();
         clockMenu.setup();
 
-
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-
                 Rectangle bounds = getBounds();
                 bounds.height /= universe.getWidthInCells();
                 bounds.height *= universe.getWidthInCells();
@@ -47,7 +44,6 @@ public class UniverseView extends JPanel implements Observer {
                 setBounds(bounds);
             }
         });
-
 
         setBackground(Color.white);
         setPreferredSize(PREFERRED_SIZE);
@@ -62,7 +58,6 @@ public class UniverseView extends JPanel implements Observer {
                 bounds.y = 0;
                 cellView.userClicked(e.getPoint(), bounds);
                 repaint();
-
             }
         });
     }

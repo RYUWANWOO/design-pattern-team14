@@ -22,7 +22,7 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
         int gridSize = this.neighborhood.getGridSize();
         this.gridView = new CellView[gridSize][gridSize];
         this.component = component;
-        ((Neighborhood) cell).registerObserver(this);
+        neighborhood.registerObserver(this);
 
         for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
@@ -37,7 +37,6 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
 
     @Override
     public void redraw(Graphics g, Rectangle here, boolean drawAll) {
-
         boolean amActive = neighborhood.isAmActive();
         boolean oneLastRefreshRequired = neighborhood.isOneLastRefreshRequired();
         ConditionVariable readingPermitted = neighborhood.getReadingPermitted();
@@ -104,7 +103,6 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
         Point position = new Point(columnOffset, rowOffset);
         Rectangle subcell = new Rectangle(0, 0, pixelsPerCell,
                 pixelsPerCell);
-
 
         gridView[row][column].userClicked(position, subcell); //{=Neighborhood.userClicked.call}
         neighborhood.setAmActive(true);
