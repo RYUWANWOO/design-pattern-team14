@@ -4,6 +4,7 @@ import com.holub.asynch.ConditionVariable;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
 import com.holub.tools.Observer;
+import com.holub.ui.CellViewFactory;
 import com.holub.ui.Colors;
 
 import javax.swing.*;
@@ -23,11 +24,7 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
 
         for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
-                if (neighborhood.getGrid()[row][column] instanceof Neighborhood) {
-                    gridView[row][column] = new NeighborhoodView(neighborhood.getGrid()[row][column], universeView);
-                } else {
-                    gridView[row][column] = new ResidentView(neighborhood.getGrid()[row][column], universeView);
-                }
+                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column],universeView);
             }
         }
     }
