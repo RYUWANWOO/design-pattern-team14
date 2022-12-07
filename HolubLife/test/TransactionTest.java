@@ -31,7 +31,7 @@ class TransactionTest {
         oscUniverse.doUndo();
 
         assertAll(
-                // After clear board
+                // After undo board
                 () -> assertTrue(((Resident) oscillator.getGrid()[1][1]).isAmAlive()),
                 () -> assertTrue(((Resident) oscillator.getGrid()[1][2]).isAmAlive()),
                 () -> assertTrue(((Resident) oscillator.getGrid()[1][3]).isAmAlive())
