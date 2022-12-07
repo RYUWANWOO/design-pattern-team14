@@ -1,6 +1,5 @@
 package com.holub.life.controller;
 
-import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.util.Timer;		// overrides java.awt.timer
@@ -8,7 +7,6 @@ import java.util.Timer;		// overrides java.awt.timer
 import com.holub.tools.Observable;
 import com.holub.tools.Observer;
 import com.holub.tools.Visitor;
-import com.holub.ui.MenuSite;
 import com.holub.tools.Publisher;
 
 

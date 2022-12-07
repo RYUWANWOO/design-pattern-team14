@@ -7,7 +7,6 @@ import java.io.*;
 import com.holub.tools.*;
 import com.holub.tools.Observable;
 import com.holub.tools.Observer;
-import com.holub.ui.Colors;
 import com.holub.asynch.ConditionVariable;
 
 /***

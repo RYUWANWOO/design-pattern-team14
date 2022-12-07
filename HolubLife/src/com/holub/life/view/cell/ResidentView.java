@@ -1,10 +1,10 @@
-package com.holub.life.view;
+package com.holub.life.view.cell;
 
-import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Resident;
+import com.holub.life.view.UniverseView;
 import com.holub.tools.Observer;
-import com.holub.ui.Colors;
+import com.holub.life.view.Colors;
 
 import javax.swing.*;
 import java.awt.*;

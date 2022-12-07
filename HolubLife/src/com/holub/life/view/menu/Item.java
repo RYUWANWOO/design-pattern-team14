@@ -1,4 +1,4 @@
-package com.holub.ui;
+package com.holub.life.view.menu;
 
 import javax.swing.*;
 import java.awt.*;
