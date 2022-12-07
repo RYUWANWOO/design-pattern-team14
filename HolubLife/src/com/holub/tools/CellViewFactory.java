@@ -1,12 +1,11 @@
-package com.holub.ui;
+package com.holub.tools;
 
-import com.holub.life.controller.Clock;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
 import com.holub.life.model.Resident;
-import com.holub.life.view.CellView;
-import com.holub.life.view.NeighborhoodView;
-import com.holub.life.view.ResidentView;
+import com.holub.life.view.cell.CellView;
+import com.holub.life.view.cell.NeighborhoodView;
+import com.holub.life.view.cell.ResidentView;
 import com.holub.life.view.UniverseView;
 
 public class CellViewFactory {

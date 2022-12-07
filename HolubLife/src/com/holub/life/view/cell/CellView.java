@@ -1,4 +1,4 @@
-package com.holub.life.view;
+package com.holub.life.view.cell;
 
 import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;

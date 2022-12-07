@@ -1,11 +1,12 @@
-package com.holub.life.view;
+package com.holub.life.view.cell;
 
 import com.holub.asynch.ConditionVariable;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
+import com.holub.life.view.UniverseView;
 import com.holub.tools.Observer;
-import com.holub.ui.CellViewFactory;
-import com.holub.ui.Colors;
+import com.holub.tools.CellViewFactory;
+import com.holub.life.view.Colors;
 
 import javax.swing.*;
 import java.awt.*;

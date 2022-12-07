@@ -2,12 +2,14 @@ package com.holub.life.view;
 
 import com.holub.life.controller.Clock;
 import com.holub.life.model.Cell;
+import com.holub.life.view.cell.CellView;
+import com.holub.life.view.cell.NeighborhoodView;
 import com.holub.tools.Observer;
 import com.holub.life.controller.Universe;
-import com.holub.ui.ClockMenu;
-import com.holub.ui.GridMenu;
-import com.holub.ui.MenuSite;
-import com.holub.ui.UndoMenu;
+import com.holub.life.view.menu.ClockMenu;
+import com.holub.life.view.menu.GridMenu;
+import com.holub.life.view.menu.MenuSite;
+import com.holub.life.view.menu.UndoMenu;
 
 import javax.swing.*;
 import java.awt.*;
