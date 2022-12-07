@@ -15,7 +15,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class UniverseView extends JPanel implements Observer {
+public class UniverseView extends JPanel{
     private final Universe universe;
     private CellView cellView;
     private Cell cell;
@@ -24,12 +24,12 @@ public class UniverseView extends JPanel implements Observer {
     public UniverseView(MenuSite menuSite, Universe universe, Cell cell, Clock clock) {
         this.universe = universe;
         this.cell = cell;
-        this.cellView = new NeighborhoodView(cell, universe, this);
+        this.cellView = new NeighborhoodView(this.cell, this);
 
-        final Dimension PREFERRED_SIZE = new Dimension(universe.getWidthInCells() * DEFAULT_CELL_SIZE,
-                universe.getWidthInCells() * DEFAULT_CELL_SIZE);
+        final Dimension PREFERRED_SIZE = new Dimension(this.universe.getWidthInCells() * DEFAULT_CELL_SIZE,
+                this.universe.getWidthInCells() * DEFAULT_CELL_SIZE);
 
-        GridMenu gridMenu = new GridMenu(menuSite,this,universe);
+        GridMenu gridMenu = new GridMenu(menuSite,this,this.universe);
         ClockMenu clockMenu = new ClockMenu(clock,menuSite);
 
         gridMenu.setup();
@@ -72,30 +72,5 @@ public class UniverseView extends JPanel implements Observer {
         panelBounds.y = 0;
 
         cellView.redraw(g, panelBounds, true);
-    }
-
-    private void refreshNow() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                Graphics g = getGraphics();
-                // Universe not displayable
-                if (g == null) {
-                    return;
-                }
-                try {
-                    Rectangle panelBounds = getBounds();
-                    panelBounds.x = 0;
-                    panelBounds.y = 0;
-                    cellView.redraw(g, panelBounds, false);
-                } finally {
-                    g.dispose();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void update() {
-        refreshNow();
     }
 }

@@ -14,14 +14,12 @@ public class ResidentView extends JPanel implements CellView, Observer {
     private static final Color LIVE_COLOR = Color.RED;
     private static final Color DEAD_COLOR = Colors.LIGHT_YELLOW;
 
-    private Universe universe;
     private Resident resident;
-    private Component component;
+    private UniverseView universeView;
 
-    public ResidentView(Cell cell, Universe universe, Component component) {
-        this.universe = universe;
+    public ResidentView(Cell cell, UniverseView universeView) {
         this.resident = (Resident) cell;
-        this.component = component;
+        this.universeView = universeView;
         resident.registerObserver(this);
     }
 
@@ -38,10 +36,10 @@ public class ResidentView extends JPanel implements CellView, Observer {
 
     @Override
     public void update() {
-        component.repaint();
+        universeView.repaint();
     }
 
-    public void userClicked(Point here, Rectangle surface){
+    public void userClicked(Point here, Rectangle surface) {
         resident.setAmALive(!resident.getAmALive());
     }
 }
