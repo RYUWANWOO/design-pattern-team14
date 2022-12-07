@@ -16,11 +16,9 @@ public class Clock implements Observable {
 	private Timer clock = new Timer();
 	private TimerTask tick = null;
 
-
 	private Clock(){}
 
 	private static Clock instance;
-
 
 	public static Clock getInstance() {
 		return Clock.LazyHolder.INSTANCE;
@@ -29,7 +27,6 @@ public class Clock implements Observable {
 	private static class LazyHolder{
 		private static final Clock INSTANCE = new Clock();
 	}
-
 
 	public void startTicking( int millisecondsBetweenTicks ){
 		if(tick != null) {
@@ -54,10 +51,7 @@ public class Clock implements Observable {
 		startTicking( 0 );
 	}
 
-
-
 	private Publisher publisher = new Publisher();
-
 
 	@Override
 	public void registerObserver(Observer observer){
@@ -79,17 +73,16 @@ public class Clock implements Observable {
 		});
 	}
 
-
 	public void tick(){
 		publisher.publish( new Visitor(){
 			@Override
 			public void visit(Observer observer) {
-				observer.update();
+				if(!menuIsActive()) {
+					observer.update();
+				}
 			}
 		});
 	}
-
-
 
 	private boolean menuIsActive(){
 		MenuElement[] path = MenuSelectionManager.defaultManager().getSelectedPath();

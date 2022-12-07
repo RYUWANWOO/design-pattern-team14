@@ -22,11 +22,10 @@ public class Universe implements Observer {
     private Clock clock;
     private static final int DEFAULT_CELL_SIZE = 8;
 
-
     public Universe(Clock clock, Cell outermostCell) {
         this.clock = clock;
         this.outermostCell = outermostCell;
-        Clock.getInstance().registerObserver(this);
+        this.clock.registerObserver(this);
     }
 
     @Override
