@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GoTest {
     @DisplayName("Still lifes single tick test")
     @Test
-    void StillSingleTick() {
+    void StillSiStngleTick() {
         Clock clock = Clock.getInstance();
 
         Neighborhood still = new Neighborhood(8, new Resident());
