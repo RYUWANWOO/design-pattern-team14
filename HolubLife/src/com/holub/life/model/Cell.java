@@ -107,4 +107,6 @@ public interface Cell {
 	 */
 
 	public void	tick();
+	public void rememberThatCellAtEdgeChangedState(int row, int column);
+	public void setAlive(boolean b);
 }

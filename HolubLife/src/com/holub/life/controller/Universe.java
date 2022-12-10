@@ -90,4 +90,11 @@ public class Universe implements Observer {
         clickedCached.clear();
         outermostCell.clear();
     }
+
+    public void setActive(Cell cell, boolean b){
+        cell.setAlive(b);
+    }
+    public void rememberThatCellAtEdgeChangedState(Cell cell, int row, int column){
+        cell.rememberThatCellAtEdgeChangedState(row,column);
+    }
 }

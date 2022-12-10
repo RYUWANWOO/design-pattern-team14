@@ -90,6 +90,15 @@ public final class Resident implements Cell, Observable {
 		}
 	}
 
+	@Override
+	public void rememberThatCellAtEdgeChangedState(int row, int column) {
+	}
+
+	@Override
+	public void setAlive(boolean b) {
+		setAmALive(b);
+	}
+
 	public boolean isAmAlive(){
 		return this.amAlive;
 	}
@@ -160,13 +169,7 @@ public final class Resident implements Cell, Observable {
 	public boolean getAmALive(){
 		return this.amAlive;
 	}
-	public boolean getWillAmAlive(){
-		return this.willBeAlive;
-	}
 	public void setAmALive(boolean b){
 		this.amAlive = b;
-	}
-	public void setWillBeAlive(boolean b){
-		this.willBeAlive = b;
 	}
 }

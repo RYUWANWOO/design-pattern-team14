@@ -1,6 +1,7 @@
 package com.holub.life.view.cell;
 
 import com.holub.asynch.ConditionVariable;
+import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Neighborhood;
 import com.holub.life.view.UniverseView;
@@ -14,18 +15,20 @@ import java.awt.*;
 public class NeighborhoodView extends JPanel implements Observer, CellView {
     private Neighborhood neighborhood;
     private UniverseView universeView;
+    private Universe universe;
     private CellView[][] gridView;
 
-    public NeighborhoodView(Cell cell, UniverseView universeView) {
+    public NeighborhoodView(Cell cell, UniverseView universeView, Universe universe) {
         this.neighborhood = (Neighborhood) cell;
         int gridSize = this.neighborhood.getGridSize();
         this.gridView = new CellView[gridSize][gridSize];
         this.universeView = universeView;
+        this.universe = universe;
         neighborhood.registerObserver(this);
 
         for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
-                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column],universeView);
+                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column], universeView, this.universe);
             }
         }
     }
@@ -99,7 +102,8 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
         Rectangle subcell = new Rectangle(0, 0, pixelsPerCell, pixelsPerCell);
 
         gridView[row][column].userClicked(position, subcell); //{=Neighborhood.userClicked.call}
-        neighborhood.setAmActive(true);
-        neighborhood.rememberThatCellAtEdgeChangedState(row, column);
+
+        universe.setActive(this.neighborhood, true);
+        universe.rememberThatCellAtEdgeChangedState(this.neighborhood, row, column);
     }
 }
