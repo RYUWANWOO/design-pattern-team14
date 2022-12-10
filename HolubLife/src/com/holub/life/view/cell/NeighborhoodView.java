@@ -28,7 +28,7 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
 
         for (int row = 0; row < gridSize; ++row) {
             for (int column = 0; column < gridSize; ++column) {
-                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column],universeView,this.universe);
+                gridView[row][column] = CellViewFactory.getInstance().createCellView(neighborhood.getGrid()[row][column], universeView, this.universe);
             }
         }
     }
@@ -104,6 +104,6 @@ public class NeighborhoodView extends JPanel implements Observer, CellView {
         gridView[row][column].userClicked(position, subcell); //{=Neighborhood.userClicked.call}
 
         universe.setActive(this.neighborhood, true);
-        universe.rememberThatCellAtEdgeChangedState(row,column);
+        universe.rememberThatCellAtEdgeChangedState(this.neighborhood, row, column);
     }
 }

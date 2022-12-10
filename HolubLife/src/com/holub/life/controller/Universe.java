@@ -94,7 +94,7 @@ public class Universe implements Observer {
     public void setActive(Cell cell, boolean b){
         cell.setAlive(b);
     }
-    public void rememberThatCellAtEdgeChangedState(int row, int column){
-        outermostCell.rememberThatCellAtEdgeChangedState(row,column);
+    public void rememberThatCellAtEdgeChangedState(Cell cell, int row, int column){
+        cell.rememberThatCellAtEdgeChangedState(row,column);
     }
 }
