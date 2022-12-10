@@ -1,5 +1,6 @@
 package com.holub.life.view.cell;
 
+import com.holub.life.controller.Universe;
 import com.holub.life.model.Cell;
 import com.holub.life.model.Resident;
 import com.holub.life.view.UniverseView;
@@ -16,10 +17,12 @@ public class ResidentView extends JPanel implements CellView, Observer {
 
     private Resident resident;
     private UniverseView universeView;
+    private Universe universe;
 
-    public ResidentView(Cell cell, UniverseView universeView) {
+    public ResidentView(Cell cell, UniverseView universeView, Universe universe) {
         this.resident = (Resident) cell;
         this.universeView = universeView;
+        this.universe = universe;
         resident.registerObserver(this);
     }
 
@@ -40,6 +43,6 @@ public class ResidentView extends JPanel implements CellView, Observer {
     }
 
     public void userClicked(Point here, Rectangle surface) {
-        resident.setAmALive(!resident.getAmALive());
+        universe.setActive(resident, !resident.getAmALive());
     }
 }

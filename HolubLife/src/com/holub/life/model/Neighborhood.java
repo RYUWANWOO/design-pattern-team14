@@ -351,6 +351,11 @@ public final class Neighborhood implements Cell, Observable {
         // else it's an internal cell. Do nothing.
     }
 
+    @Override
+    public void setAlive(boolean b) {
+        setAmActive(b);
+    }
+
     /**
      * Return the edge cell in the indicated row and column.
      */

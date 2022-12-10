@@ -71,4 +71,12 @@ public class DummyCell implements Cell{
     @Override
     public void tick() {
     }
+
+    @Override
+    public void rememberThatCellAtEdgeChangedState(int row, int column) {
+    }
+
+    @Override
+    public void setAlive(boolean b) {
+    }
 }
