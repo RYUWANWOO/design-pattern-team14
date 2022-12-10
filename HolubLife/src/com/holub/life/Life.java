@@ -24,7 +24,6 @@ public final class Life extends JFrame {
     }
 
     private Life() {
-        //제목을 정해요 - 건들 필요 없고
         super("The Game of Life. " + "(c)2003 Allen I. Holub <http://www.holub.com>");
 
         MenuSite menuSite = new MenuSite();
@@ -40,7 +39,6 @@ public final class Life extends JFrame {
         getContentPane().add(universeview, BorderLayout.CENTER); //{=life.java.install}
 
         pack();
-        //visible도 건들 필요가 없다.
         setVisible(true);
     }
 }
